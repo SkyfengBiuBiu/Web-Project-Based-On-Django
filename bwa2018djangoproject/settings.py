@@ -10,13 +10,13 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+
 import dj_database_url
 import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -30,6 +30,8 @@ DEBUG = True
 # Application definition
 
 INSTALLED_APPS = [
+    'users.apps.UsersConfig',
+    'profiles.apps.ProfilesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -58,7 +60,7 @@ ROOT_URLCONF = 'bwa2018djangoproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,7 +76,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'bwa2018djangoproject.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
@@ -88,10 +89,12 @@ DATABASES = {
 
         # If your group uses PostgreSQL comment out two lines under this,
         # and add other needed settings.
-        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        #'NAME': 'bwa2018djangoproject'
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': 'bwa2018djangoproject',
         # if you want to define user, password etc.
         # do it here
+        # 'USER': 'postgres',
+        # 'PASSWORD': 'root'
     }
 }
 
@@ -145,3 +148,9 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
+
+# Cusomized User Model
+AUTH_USER_MODEL = 'users.CustomUser'
+
+LOGIN_REDIRECT_URL = 'profiles:home'
+LOGOUT_REDIRECT_URL = 'home'
