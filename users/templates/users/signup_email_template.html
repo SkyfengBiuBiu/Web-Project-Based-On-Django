@@ -1,0 +1,14 @@
+{% load i18n %}{% autoescape off %}
+    Hi @{{ user.get_username }}
+
+    Activate your {{ site_name }} account by verifying your email address ({{ email }}). This lets you access all of
+    {{ site_name }}’s features.
+
+    {% block reset_link %}
+        {{ protocol }}://{{ domain }}{% url 'users:signup_confirm' uidb64=uid token=token %}
+    {% endblock %}
+
+    {% trans "Thanks for using our site!" %}
+
+    {% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+{% endautoescape %}
