@@ -152,11 +152,16 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Activate Django-Heroku.
 django_heroku.settings(locals())
 
-# Email sending test
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Using Django Email backends to simulate Email sending
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Cusomized User Model
 AUTH_USER_MODEL = 'users.CustomUser'
 
+# Login and Logout Redirect URL
 LOGIN_REDIRECT_URL = 'profiles:home'
 LOGOUT_REDIRECT_URL = 'home'
