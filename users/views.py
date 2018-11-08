@@ -56,6 +56,16 @@ class SignUpConfirmView(generic.TemplateView):
         return context
 
 
+class DeleteView(generic.DeleteView):
+    template_name = 'users/user_confirm_delete.html'
+    model = CustomUser
+    success_url = reverse_lazy('users:delete_done')
+
+
+class DeleteDoneView(generic.TemplateView):
+    template_name = 'users/user_delete_done.html'
+
+
 def user_detail(request, user_id):
     context = {
         'content': 'User Detail Page'
