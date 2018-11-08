@@ -27,7 +27,7 @@ Start the documentation with identifying information:
 
 - GitLab repo URL: https://course-gitlab.tut.fi/bwa-2018/bwa-group003
 
-- Heroku deployment URL: https://stormy-brook-84564.herokuapp.com/
+- Heroku deployment URL: https://sheltered-badlands-86452.herokuapp.com/
 
 ## Must have features
 Set up an implementation order and timetable for must have features. Decide which features must be implemented before work on others can begin, and setup a deadline for them in the timetable.
@@ -200,7 +200,7 @@ groups/group_detail.html | 1.Actions: leave.
 ### Heroku deployment
 Write down the URL of your Heroku app here too.
 
-https://stormy-brook-84564.herokuapp.com/
+https://sheltered-badlands-86452.herokuapp.com/
 
 Your plan for the Heroku deployment. 
 - Everyone in our group
