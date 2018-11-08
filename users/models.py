@@ -26,7 +26,7 @@ class CustomUserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
 
     # Additional information
-    age = models.PositiveIntegerField(_('age'), default=0, blank=True)
+    age = models.PositiveIntegerField(_('age'), default=0, blank=True, null=True)
     date_of_birth = models.DateField(_('birthday'), blank=True, null=True)
     photo = models.ImageField(_(''), upload_to='users/%Y/%m/%d', blank=True, null=True)
 
