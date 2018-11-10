@@ -1,5 +1,4 @@
 # Initial project plan document
-The initial project plan should provide a steady framework for our group’s work.
 
 ## Course project group information
 
@@ -30,10 +29,6 @@ Start the documentation with identifying information:
 - Heroku deployment URL: https://sheltered-badlands-86452.herokuapp.com/
 
 ## Must have features
-Set up an implementation order and timetable for must have features. Decide which features must be implemented before work on others can begin, and setup a deadline for them in the timetable.
-
-Decide initially which tasks (design, research, implement, test,...) are needed to complete each feature. Add them to GitLab’s Issue Board in your repo.
-
 
 Tasks | Description of must have features | Time of the deadline<br>(DD.MM.YYYY [HH:MM]） 
 ------------ | ------------- | ------------
@@ -44,13 +39,6 @@ test | 1. With the validator, validate the Web app codes.<br>2. Deploy our site 
 
 
 ## Planned +2 features
-This subsection in the initial project plan is similar to the “Must have features” subsection above. The same information should be here for the +2 features, as there earlier for the must have features.  
-
-Most important decisions in this subsection is which +2 features the group is interested in implementing. You should decide on a set +2 features which gives you enough +2 stars, even if some are not implemented in the end, or your group receives less than maximum star for some +2 feature.
-
-Remember: _Many of the individual +2 features cannot be easily added to project which has already all the must have features implemented. So, groups should make initial plans on the set of +2 features they plan to implement in the initial project plan document._
-
-
 
 Tasks | Description of must have features | Time of the deadline<br>(DD.MM.YYYY [HH:MM] )
 ------------ | ------------- | ------------
@@ -61,35 +49,20 @@ Testing | Unit Testing using Django Test | 07.12.2018 23:59
 
 
 ## Pages and navigation
-This is the high level view to your site. Here you have to draw a freeform diagram showing the pages and navigation within your site. Its main function is to ease design discussions within the group, and to communicate your design to the reader. 
-
-First name the web pages of your initial design of the web site site with descriptive names, and draw them as nodes. Then draw the navigation paths between them where needed. Title the navigation paths using the action and the type of user doing the navigation, so it is obvious to reader what the transition between actually means (for example transition from a page showing events to a page page for modifying a single event could be named “User who created the event starts modifying it”. See image 1 for an example. The data and interaction on the web pages is described more closely in the “Needed Django views and templates” subsection.
-
-
-Get enough detail in this diagram to cover what your group considers are the most important navigation paths in your website. But the diagram should not be an exhaustive documentation of your system, so you should leave what you see as secondary out of it.
-
 
 ![Page Navigation](docs/PageNavigation.png)
 
 
 
 ## Technological considerations
-Here groups handle the technical aspects of their Django implementation. If done correctly, these texts can work as a basis for commenting your code, too.
 
 ### Django apps in your Django project
-If you plan the implement the one star +2 feature “Use separate Django apps for different parts of your project”, you should design the basic division of functionality apps early on.
 
 ![System Components](docs/SystemComponent.png)
 
 
 ### Needed Django models and their attributes
-A good start for figuring the needed models is a close reading of “Description of the web app data and related functions”. 
 
-For each model you should state at least:
-- Name of the model
-- Attributes and their Django types
-- A description of the models purpose on your system
-- Connections to other models
   ![Models](docs/Models.png)
 
 User: 
@@ -127,7 +100,6 @@ The group has the two aspects: the basic information and discussion. In the basi
 
 
 ### URIs
-Here you describe how your group’s web site’s URLs are mapped to its resources and views.
 
 URL | Template 
 ------------ | ------------- 
@@ -151,11 +123,7 @@ groups/{group_id}/detail | groups/group_detail.html
 
 ### Needed Django views and templates
 
-Name of view or template
-
-For views:  function on the system. Also define when they are called, and with what parameters. What is the output (rendering a template, etc.).
-
-
+#### Views
 View | Parameters | Rendered Template
 ------------ | ------------- | ------------
 LoginView | -  | users/login.html
@@ -176,8 +144,7 @@ GroupDetailView | group_id  | groups/group_detail.html
 
 
 
-For templates: a simple sketch or a textual description showing the parts of the page that are be rendered with the template. You should concentrate on what data is shown to users (for example: username as text, list of friendships,,...), and what interaction is possible on the page (for example: “select from list -> click a “Modify” button -> Goto “Modify item” page). You don’t have to define the graphics here.
-
+#### Templates
 Template | Description 
 ------------ | ------------- 
 users/login.html | 1. Actions: login.<br>2. Forms: LoginForm. 
@@ -198,39 +165,24 @@ groups/group_detail.html | 1.Actions: leave.
 
 
 ### Heroku deployment
-Write down the URL of your Heroku app here too.
 
 https://sheltered-badlands-86452.herokuapp.com/
 
-Your plan for the Heroku deployment. 
+Heroku deployment plan:
 - Everyone in our group
 - Twice a week
 
 
 ## Testing
-Here you describe your group’s testing plan for the web site. 
-
-Do you plan to do the +2 feature “Thorough testing using Django test”?
-
-How are you going to test your site, by which methods? 
-
-Who is responsible for what in your testing? 
-
 1. Unit Testing: unit testing tasks will carry out during the development cycle.
 2. Integration Testing: after each app was implemented, phased integration testing would be conducted.
 3. Deployment Testing: after integration testing, there would be a phased deployment testing.
 
-The testing tasks will be carried out by each member of our group with respect to different app in this project.
+The testing tasks will be carried out by each member of our group corresponding to different app in this project.
 
 
 ## Project timetable and division of work
-Initial timetable for the design and implementation of features and +2 features
-- Which group member(s) will be responsible for what feature
-How much time each group member promises to course project per week, or better yet, per day
-- Note down each members promise for committed hours for this project.
-Who and when will create the GitLab issues and assign them
-
-As each member in our group takes responsible for different apps in this project, so all of the features before-mentioned will be implemented by all of our three members with respect to each app.
+As each member in our group takes responsible for different apps in this project, so all of the features before-mentioned will be implemented by all of our three members corresponding to each app.
 
 No. | Task Name | Features | Developer | Start | End 
 --- | --------- | -------- | --------- | ----- | --- 
