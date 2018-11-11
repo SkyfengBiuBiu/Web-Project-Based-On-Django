@@ -25,21 +25,20 @@
 {% block script %}
 <script>
  $(document).ready(function() {
-    updateMsg();    //更细信息
-            //表单 submit 事件
+    updateMsg();
     $("#chatForm").submit(function() {
-        //ajax 提交表单
+
         $.post("./post/",
         	$('#chatForm').serialize(),
         	function(data) {
-            $("#content").val("");  //消息发送成功后清空内容框
-            //addMsg(xml);    //处理 xml
+            $("#content").val("");
+
         });
-        return false;       //阻止表单提交
+        return false;
     });
 });
 
-//更新消息
+
 function updateMsg() {
     $.post(
     	"./post/",
@@ -48,9 +47,9 @@ function updateMsg() {
 			last_chat_id: $(".chat_id").last().val()
 		},
 		function(data) {
-        	$('.list-group-item').append(data);    //解析返回的 xml
+        	$('.list-group-item').append(data);
     });
-    setTimeout("updateMsg()", 5000);        //每秒更新一次
+    setTimeout("updateMsg()", 5000);       
 }
 </script>
 {% endblock %}
