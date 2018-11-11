@@ -5,6 +5,25 @@
     <title>Title</title>
 </head>
 <body>
-
+    <h1>this is event home test</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>event name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in event_list %}
+                <tr>
+                    <td><a href="/events/{{ event.event_id }}/detail/">{{ event.event_name }}</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <br>
+    <div>
+        <a href="/events/{{ event_list.0.user_id  }}/invitation/">Invitation List</a>
+    </div>
 </body>
 </html>

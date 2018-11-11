@@ -5,8 +5,21 @@
     <title>group detail</title>
 </head>
 <body>
-    <form method="post" action="/group_detail/">
-        <input type="submit" value="leave"/>
-    </form>
+    <h1>this is group detail test</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>member name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in member_list %}
+                <tr>
+                    <td>{{ member.member_id }}</td>
+                    <td>{{ member.member_name }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>

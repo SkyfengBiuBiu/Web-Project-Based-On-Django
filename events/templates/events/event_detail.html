@@ -5,10 +5,22 @@
     <title>event detail</title>
 </head>
 <body>
-    <h1>event detail</h1>
-    <form method="post" action="/event_detail/">
-        <p>invitation name：<input type="text" name="invitation name"/></p>
-        <input type="submit" value="invite"/>
-    </form>
+    <h1>event discussion detail</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>event detail</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for detail in detail_list %}
+                <tr>
+                    <td><a>{{ detail.member_name }}</a></td>
+                    <td><a>{{ detail.time }}</a></td>
+                    <td><a>{{ detail.location }}</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
