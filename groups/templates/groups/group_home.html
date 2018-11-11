@@ -5,6 +5,28 @@
     <title>group home</title>
 </head>
 <body>
+    <h1>this is group home test</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>group name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for group in group_list %}
+                <tr>
+{#                    <td>{{ group.No }}</td>#}
+                    <td><a href="/groups/{{ group.group_id }}/detail/">{{ group.group_name }}</a></td>
+                    <td>
+                        <form method="post" action="/groups/{{ group.user_id }}/home/">
+                            <p><input type="hidden" name="group_id" value="{{ group.group_id }}"/></p>
+                            <input type="submit" value="leave"/>
+                        </form>
+                    </td>
 
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
