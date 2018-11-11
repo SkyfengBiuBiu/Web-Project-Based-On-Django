@@ -18,7 +18,7 @@
     </div>
     <div class="form-group col-md-4">
         <input type="hidden" name="post_type" value="send_chat"/>
-        <input type="submit" class="btn btn-lg btn-primary" value="发送"/>
+        <input type="submit" class="btn btn-lg btn-primary" value="send"/>
     </div>
 </form>
 {% endblock %}
@@ -49,7 +49,7 @@ function updateMsg() {
 		function(data) {
         	$('.list-group-item').append(data);
     });
-    setTimeout("updateMsg()", 5000);       
+    setTimeout("updateMsg()", 5000);
 }
 </script>
 {% endblock %}
