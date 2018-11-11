@@ -1,3 +1,5 @@
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ValidationError
 from django.shortcuts import render
@@ -7,8 +9,10 @@ from django.utils.http import urlsafe_base64_decode
 from django.views import generic
 from django.views.decorators.cache import never_cache
 
-from users.models import CustomUser
-from .forms import CustomUserCreationForm
+from users.models import CustomUser, CustomUserProfile
+from .forms import CustomUserCreationForm, UserProfileChangeForm
+
+decorators = [never_cache, login_required]
 
 
 # Create your views here.
@@ -16,6 +20,10 @@ class SignUpView(generic.CreateView):
     template_name = 'users/signup.html'
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('users:signup_done')
+
+    def form_valid(self, form):
+        form.request = self.request
+        return super().form_valid(form)
 
 
 class SignUpDoneView(generic.TemplateView):
@@ -56,6 +64,31 @@ class SignUpConfirmView(generic.TemplateView):
         return context
 
 
+@method_decorator(login_required, name='dispatch')
+class UserProfileUpdateView(generic.edit.UpdateView):
+    template_name = 'users/update_form.html'
+    form_class = UserProfileChangeForm
+
+    def get_object(self, queryset=None):
+        return CustomUserProfile.objects.get(pk=self.kwargs['pk'])
+
+    def get_success_url(self):
+        messages.success(self.request, 'Your information saved.')
+        return reverse_lazy('users:update', kwargs=self.kwargs)
+
+
+@method_decorator(login_required, name='dispatch')
+class DeleteView(generic.DeleteView):
+    template_name = 'users/user_confirm_delete.html'
+    model = CustomUser
+    success_url = reverse_lazy('users:delete_done')
+
+
+class DeleteDoneView(generic.TemplateView):
+    template_name = 'users/user_delete_done.html'
+
+
+@method_decorator(login_required, name='dispatch')
 def user_detail(request, user_id):
     context = {
         'content': 'User Detail Page'
