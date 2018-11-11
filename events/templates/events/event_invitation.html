@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>event invitation</title>
+</head>
+<body>
+    <h1>event invitation</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>invitation list</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for invitation in invitation_list %}
+                <tr>
+                    <td><a>{{ invitation.inviter_name }}</a></td>
+                    <td><a>{{ invitation.reason }}</a></td>
+                    <td><a>{{ invitation.location }}</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
