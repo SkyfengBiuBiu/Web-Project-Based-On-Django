@@ -1,1 +1,20 @@
-<h1>{{ content }}</h1>
+{% extends 'base.html' %}
+{% block title %}Discussion index{% endblock %}
+{% block content %}
+<h2>Discussion</h2>
+{% for discussion in discussions %}
+    <h4 class="list-group-item-heading">{{discussion.creator}}:{{discussion.id}}</h4>
+    <p class="list-group-item-text">
+    {% for user in discussion.users %}
+        <p>{{user.last_name}}</p>
+        <p>{{user.first_name}}</p>
+    {% endfor %}
+    </p>
+    <a href="{% url 'discussions:discussion_detail' discussion.id %}"></a>
+    <br>
+{% endfor %}
+    <form method="post" action="">
+    {% csrf_token %}
+    <input type="submit" value="leave" />
+    </form>
+{% endblock %}
