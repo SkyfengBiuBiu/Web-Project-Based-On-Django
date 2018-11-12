@@ -9,10 +9,8 @@ urlpatterns = [
     path('signup/done/', views.SignUpDoneView.as_view(), name='signup_done'),
     path('signup/<uidb64>/<token>/', views.SignUpConfirmView.as_view(), name='signup_confirm'),
 
-    path('<int:pk>/update/', views.UserProfileUpdateView.as_view(), name='update'),
+    path('<int:user_id>/profile/', views.UserProfileView.as_view(), name='profile'),
 
-    path('<int:pk>/delete/', views.DeleteView.as_view(), name='delete'),
-    path('delete/done/', views.DeleteDoneView.as_view(), name='delete_done'),
-
-    path('<int:user_id>/user_detail', views.user_detail, name='user_detail')
+    path('<int:user_id>/delete/', views.CustomUserDeleteView.as_view(), name='delete'),
+    path('delete/done/', views.CustomUserDeleteDoneView.as_view(), name='delete_done'),
 ]

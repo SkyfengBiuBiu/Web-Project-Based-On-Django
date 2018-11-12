@@ -14,7 +14,8 @@ import os
 import dj_database_url
 import django_heroku
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
@@ -25,7 +26,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = "7rf22yx3#lm(+d25m-_2kl(%wtvm=(%j7%m0&!20%e2r2283+p"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # Application definition
 
@@ -163,5 +164,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 AUTH_USER_MODEL = 'users.CustomUser'
 
 # Login and Logout Redirect URL
-LOGIN_REDIRECT_URL = 'profiles:home'
-LOGOUT_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'profiles:my_home'
+LOGIN_URL = 'users/login'
+LOGOUT_REDIRECT_URL = '/users/login'

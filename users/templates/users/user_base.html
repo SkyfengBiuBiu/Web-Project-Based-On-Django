@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container page-content-wrapper">
+        <div class="row">
+            <div class="col-md-3 change-gutters">
+                <!-- User Personal Information start -->
+                <div class="card post-card">
+                    <a href="{% url 'profiles:visit_home' user.id %}">
+                        <img class="rounded-circle card-img-top" src="{{ user.customuserprofile.photo.url }}"
+                             alt="{{ user.username }}'s Profile Photo">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-text">{{ user.username }}</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Email: {{ user.email }}</li>
+                        <li class="list-group-item">Phone: {{ user.phone }}</li>
+                        <li class="list-group-item">Address: {{ user.address }}</li>
+                    </ul>
+                    <div class="card-body">
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Last login: {{ user.last_login }}
+                    </div>
+                </div>
+                <!-- User Personal Information end -->
+            </div>
+
+            <div class="col-md-9 change-gutters">
+                <!-- Main Content start -->
+                {% block main-content %}
+                {% endblock %}
+                <!-- Main Content end -->
+            </div>
+        </div>
+    </div>
+{% endblock %}

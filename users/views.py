@@ -2,15 +2,15 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ValidationError
-from django.shortcuts import render
+from django.db import transaction
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.http import urlsafe_base64_decode
 from django.views import generic
 from django.views.decorators.cache import never_cache
 
-from users.models import CustomUser, CustomUserProfile
-from .forms import CustomUserCreationForm, UserProfileChangeForm
+from users.models import CustomUser
+from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomUserProfileFormSet
 
 decorators = [never_cache, login_required]
 
@@ -65,32 +65,45 @@ class SignUpConfirmView(generic.TemplateView):
 
 
 @method_decorator(login_required, name='dispatch')
-class UserProfileUpdateView(generic.edit.UpdateView):
-    template_name = 'users/update_form.html'
-    form_class = UserProfileChangeForm
+class UserProfileView(generic.UpdateView):
+    template_name = 'users/user_profile.html'
+    pk_url_kwarg = 'user_id'
+    form_class = CustomUserChangeForm
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        profile = context['profile']
+        with transaction.atomic():
+            self.object = form.save()
+
+            if profile.is_valid():
+                profile.instance = self.object
+                profile.save()
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['profile'] = CustomUserProfileFormSet(self.request.POST, self.request.FILES, instance=self.object)
+        else:
+            context['profile'] = CustomUserProfileFormSet(instance=self.object)
+        return context
 
     def get_object(self, queryset=None):
-        return CustomUserProfile.objects.get(pk=self.kwargs['pk'])
+        return CustomUser.objects.get(pk=self.kwargs[UserProfileView.pk_url_kwarg])
 
     def get_success_url(self):
         messages.success(self.request, 'Your information saved.')
-        return reverse_lazy('users:update', kwargs=self.kwargs)
+        return reverse_lazy('users:profile', kwargs=self.kwargs)
 
 
 @method_decorator(login_required, name='dispatch')
-class DeleteView(generic.DeleteView):
+class CustomUserDeleteView(generic.DeleteView):
     template_name = 'users/user_confirm_delete.html'
+    pk_url_kwarg = 'user_id'
     model = CustomUser
     success_url = reverse_lazy('users:delete_done')
 
 
-class DeleteDoneView(generic.TemplateView):
+class CustomUserDeleteDoneView(generic.TemplateView):
     template_name = 'users/user_delete_done.html'
-
-
-@method_decorator(login_required, name='dispatch')
-def user_detail(request, user_id):
-    context = {
-        'content': 'User Detail Page'
-    }
-    return render(request, 'users/user_detail.html', context)

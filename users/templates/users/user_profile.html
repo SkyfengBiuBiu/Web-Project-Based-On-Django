@@ -1,0 +1,31 @@
+{% extends 'users/user_base.html' %}
+{% load static %}
+
+{% block title %}
+    Profile Information
+{% endblock %}
+
+{% block main-content %}
+    <div class="card">
+        <div class="card-body">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <h4>Profile Information</h4>
+                    <hr>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <form enctype="multipart/form-data" method="post">{% csrf_token %}
+                        {{ form.as_p }}
+
+                        {{ profile.management_form }}
+                        {{ profile.as_p }}
+                        <button type="submit" class="btn btn-primary">Update My Profile</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

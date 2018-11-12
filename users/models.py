@@ -21,14 +21,24 @@ class CustomUser(AbstractUser):
         ),
     )
 
+    class Meta(AbstractUser.Meta):
+        ordering = ['-date_joined']
+
 
 class CustomUserProfile(models.Model):
+    last_modified = models.DateTimeField(_('last modified'), auto_now=True)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
 
     # Additional information
-    age = models.PositiveIntegerField(_('age'), default=0, blank=True, null=True)
+    age = models.PositiveSmallIntegerField(_('age'), default=0, blank=True, null=True)
     date_of_birth = models.DateField(_('birthday'), blank=True, null=True)
-    photo = models.ImageField(_(''), upload_to='users/%Y/%m/%d', blank=True, null=True)
+    photo = models.ImageField(_('photo'), upload_to='users/%Y/%m/%d', blank=True, null=True)
+
+    GENDER_CHOICES = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+    )
+    gender = models.CharField(_('gender'), max_length=1, choices=GENDER_CHOICES, blank=True, null=True)
 
     def __str__(self):
         return 'Profile for user {}'.format(self.user.username)

@@ -1,14 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'users/user_base.html' %}
 
 {% block title %}
     Delete Account
 {% endblock %}
 
-{% block content %}
+{% block main-content %}
     <h1>Delete your account?</h1>
     <form method="post">{% csrf_token %}
         <p>Once you have confirmed your operation, all your data will be deleted from our website.</p>
         <p>Are you sure you want to delete your account? </p>
-        <button class="btn btn-success ml-2" type="submit">Confirm</button>
+        <button class="btn btn-primary" type="submit">Confirm</button>
     </form>
 {% endblock %}
