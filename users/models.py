@@ -2,7 +2,9 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
 from discussions.models import Discussion
+
 
 # Create your models here.
 class CustomUser(AbstractUser):
@@ -11,7 +13,7 @@ class CustomUser(AbstractUser):
     email = models.EmailField(_('email address'), blank=False)
     phone = models.CharField(_('phone number'), max_length=20, blank=False)
     address = models.CharField(_('address'), max_length=254, blank=False)
-    discussions = models.ManyToManyField(Discussion)
+
     is_active = models.BooleanField(
         _('active'),
         default=False,
@@ -20,6 +22,8 @@ class CustomUser(AbstractUser):
             'Unselect this instead of deleting accounts.'
         ),
     )
+
+    discussions = models.ManyToManyField(Discussion)
 
     class Meta(AbstractUser.Meta):
         ordering = ['-date_joined']

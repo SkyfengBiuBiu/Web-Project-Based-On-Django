@@ -17,6 +17,17 @@ class CustomUserCreationForm(UserCreationForm):
         model = CustomUser
         fields = ('first_name', 'last_name', 'username', 'email', 'phone', 'address')
 
+    def __init__(self, *args, **kwargs):
+        super(CustomUserCreationForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['last_name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['username'].widget.attrs.update({'class': 'form-control'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control'})
+        self.fields['phone'].widget.attrs.update({'class': 'form-control'})
+        self.fields['address'].widget.attrs.update({'class': 'form-control'})
+        self.fields['password1'].widget.attrs.update({'class': 'form-control'})
+        self.fields['password2'].widget.attrs.update({'class': 'form-control'})
+
     def send_mail(self, request, user):
         current_site = get_current_site(request)
         site_name = current_site.name
@@ -44,7 +55,7 @@ class CustomUserCreationForm(UserCreationForm):
         email_message.send()
 
     def save(self, commit=True):
-        user = super().save(commit=True)
+        user = super(CustomUserCreationForm, self).save(commit=True)
         # Create an empty profile for users
         CustomUserProfile.objects.create(user=user)
         # Send validation Email on sign-up
@@ -56,20 +67,29 @@ class CustomUserChangeForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ('first_name', 'last_name', 'phone', 'address')
-        widgets = {'first_name': forms.TextInput(attrs={'class': 'form-control'}),
-                   'last_name': forms.TextInput(attrs={'class': 'form-control'}),
-                   'phone': forms.TextInput(attrs={'class': 'form-control'}),
-                   'address': forms.TextInput(attrs={'class': 'form-control'})}
+
+    def __init__(self, *args, **kwargs):
+        super(CustomUserChangeForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['last_name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['phone'].widget.attrs.update({'class': 'form-control'})
+        self.fields['address'].widget.attrs.update({'class': 'form-control'})
 
 
 class CustomUserProfileChangeForm(forms.ModelForm):
     class Meta:
         model = CustomUserProfile
         fields = ['gender', 'age', 'date_of_birth', 'photo']
-        widgets = {'gender': forms.Select(attrs={'class': 'form-control'}),
-                   'age': forms.NumberInput(attrs={'class': 'form-control'}),
-                   'date_of_birth': forms.DateTimeInput(attrs={'class': 'form-control'}),
-                   'photo': forms.FileInput(attrs={'class': 'form-control'})}
+        widgets = {
+            'photo': forms.ClearableFileInput(attrs={'class': 'form-control'})
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CustomUserProfileChangeForm, self).__init__(*args, **kwargs)
+        self.fields['gender'].widget.attrs.update({'class': 'form-control'})
+        self.fields['age'].widget.attrs.update({'class': 'form-control'})
+        self.fields['date_of_birth'].widget.attrs.update({'class': 'form-control'})
+        self.fields['photo'].widget.attrs.update({'class': 'form-control'})
 
 
 CustomUserProfileFormSet = inlineformset_factory(CustomUser, CustomUserProfile, form=CustomUserProfileChangeForm,
@@ -109,7 +129,7 @@ class CustomUserAdminCreationForm(UserCreationForm):
         email_message.send()
 
     def save(self, commit=True):
-        user = super().save(commit=True)
+        user = super(CustomUserAdminCreationForm, self).save(commit=True)
         # Create an empty profile for users
         CustomUserProfile.objects.create(user=user)
         # Send validation Email on sign-up

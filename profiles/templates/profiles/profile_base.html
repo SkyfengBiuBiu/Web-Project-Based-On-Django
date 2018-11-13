@@ -12,7 +12,10 @@
                 <!-- User Personal Information start -->
                 <div class="card post-card">
                     <a href="{% url 'profiles:visit_home' owner.id %}">
-                        <img class="rounded-circle card-img-top" src="{{ owner.customuserprofile.photo.url }}"
+                        <img class="rounded-circle card-img-top"
+                                {% if owner.customuserprofile.photo.url is not None %}
+                             src="{{ owner.customuserprofile.photo.url }}"
+                                {% else %} src="{% static 'default_photo.jpg' %}" {% endif %}
                              alt="{{ owner.username }}'s Profile Photo">
                     </a>
                     <div class="card-body">

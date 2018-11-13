@@ -23,7 +23,7 @@ class SignUpView(generic.CreateView):
 
     def form_valid(self, form):
         form.request = self.request
-        return super().form_valid(form)
+        return super(SignUpView, self).form_valid(form)
 
 
 class SignUpDoneView(generic.TemplateView):
@@ -46,7 +46,7 @@ class SignUpConfirmView(generic.TemplateView):
                 self.user.save()
                 self.valid_link = True
 
-        return super().dispatch(*args, **kwargs)
+        return super(SignUpConfirmView, self).dispatch(*args, **kwargs)
 
     def get_user(self, uidb64):
         try:
@@ -58,7 +58,7 @@ class SignUpConfirmView(generic.TemplateView):
         return user
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super(SignUpConfirmView, self).get_context_data(**kwargs)
         context['valid_link'] = self.valid_link
         context['username'] = self.user.username
         return context
@@ -79,10 +79,10 @@ class UserProfileView(generic.UpdateView):
             if profile.is_valid():
                 profile.instance = self.object
                 profile.save()
-        return super().form_valid(form)
+        return super(UserProfileView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super(UserProfileView, self).get_context_data(**kwargs)
         if self.request.POST:
             context['profile'] = CustomUserProfileFormSet(self.request.POST, self.request.FILES, instance=self.object)
         else:
@@ -102,7 +102,9 @@ class CustomUserDeleteView(generic.DeleteView):
     template_name = 'users/user_confirm_delete.html'
     pk_url_kwarg = 'user_id'
     model = CustomUser
-    success_url = reverse_lazy('users:delete_done')
+
+    def get_success_url(self):
+        return reverse_lazy('users:delete_done')
 
 
 class CustomUserDeleteDoneView(generic.TemplateView):

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% load static %}
 
 {% block content %}
@@ -8,7 +9,10 @@
                 <!-- User Personal Information start -->
                 <div class="card post-card">
                     <a href="{% url 'profiles:visit_home' user.id %}">
-                        <img class="rounded-circle card-img-top" src="{{ user.customuserprofile.photo.url }}"
+                        <img class="rounded-circle card-img-top"
+                                {% if user.customuserprofile.photo.url is not None %}
+                             src="{{ user.customuserprofile.photo.url }}"
+                                {% else %} src="{% static 'default_photo.jpg' %}" {% endif %}
                              alt="{{ user.username }}'s Profile Photo">
                     </a>
                     <div class="card-body">
