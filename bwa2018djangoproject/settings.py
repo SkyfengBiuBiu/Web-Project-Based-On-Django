@@ -34,7 +34,6 @@ INSTALLED_APPS = [
     # Local Apps
     'users.apps.UsersConfig',
     'profiles.apps.ProfilesConfig',
-
     # Django Apps
     'django.contrib.admin',
     'django.contrib.auth',
