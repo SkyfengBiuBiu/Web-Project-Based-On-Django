@@ -1,0 +1,28 @@
+<div class="card-body">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <h4>Privacy Settings</h4>
+            <hr>
+            <!-- Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-dismissible {{ message.tags }} fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form enctype="multipart/form-data" method="post">{% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Update Privacy Settings</button>
+            </form>
+        </div>
+    </div>
+</div>

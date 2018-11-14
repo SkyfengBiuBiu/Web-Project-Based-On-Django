@@ -93,7 +93,7 @@ class UserProfileView(generic.UpdateView):
         return CustomUser.objects.get(pk=self.kwargs[UserProfileView.pk_url_kwarg])
 
     def get_success_url(self):
-        messages.success(self.request, 'Your information saved.')
+        messages.success(self.request, 'Profile information updated.', extra_tags='alert-success')
         return reverse_lazy('users:profile', kwargs=self.kwargs)
 
 
@@ -108,7 +108,7 @@ class PrivacySettingsView(generic.UpdateView):
         return PrivacySettings.objects.get(pk=self.kwargs[PrivacySettingsView.pk_url_kwarg])
 
     def get_success_url(self):
-        messages.success(self.request, 'Your information saved.')
+        messages.success(self.request, 'Privacy settings updated.', extra_tags='alert-success')
         return reverse_lazy('users:privacy_settings', kwargs=self.kwargs)
 
 

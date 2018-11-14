@@ -11,6 +11,16 @@ class Post(models.Model):
     last_modified = models.DateTimeField(_('last modified'), auto_now=True)
     content = models.CharField(_('post'), max_length=140)
 
+    PUBLIC = 'pb'
+    FRIENDS = 'fr'
+    JUST_ME = 'jm'
+    SETTING_CHOICES = (
+        (PUBLIC, 'Public'),
+        (FRIENDS, 'Friends'),
+        (JUST_ME, 'Just me')
+    )
+    privacy_level = models.CharField(_('privacy level'), max_length=2, choices=SETTING_CHOICES, default=PUBLIC)
+
     class Meta:
         ordering = ['-created_time', '-last_modified']
 
