@@ -1,7 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import JsonResponse
-from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import generic
 
@@ -64,14 +63,6 @@ class VisitingHomeView(ProfilesHomeView, generic.TemplateView):
         context = super(VisitingHomeView, self).get_context_data(**kwargs)
         owner = CustomUser.objects.get(pk=kwargs[self.pk_url_kwarg])
         return self.get_page_data(context, owner)
-
-
-# Profiles Settings View
-@method_decorator(login_required, name='dispatch')
-class SettingsView(generic.UpdateView):
-    template_name = 'profiles/profile_settings.html'
-    pk_url_kwarg = 'user_id'
-    success_url = reverse_lazy('profiles:settings')
 
 
 # Ajax Post Views

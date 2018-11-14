@@ -3,8 +3,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from discussions.models import Discussion
-
 
 # Create your models here.
 class CustomUser(AbstractUser):
@@ -22,8 +20,6 @@ class CustomUser(AbstractUser):
             'Unselect this instead of deleting accounts.'
         ),
     )
-
-    discussions = models.ManyToManyField(Discussion)
 
     class Meta(AbstractUser.Meta):
         ordering = ['-date_joined']
@@ -46,3 +42,26 @@ class CustomUserProfile(models.Model):
 
     def __str__(self):
         return 'Profile for user {}'.format(self.user.username)
+
+
+class PrivacySettings(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+
+    PUBLIC = 'pb'
+    FRIENDS = 'fr'
+    JUST_ME = 'jm'
+    SETTING_CHOICES = (
+        (PUBLIC, 'Public'),
+        (FRIENDS, 'Friends'),
+        (JUST_ME, 'Just me')
+    )
+    real_name_p = models.CharField(_('real name privacy'), max_length=2, choices=SETTING_CHOICES, default=PUBLIC)
+    email_p = models.CharField(_('email privacy'), max_length=2, choices=SETTING_CHOICES, default=PUBLIC)
+    phone_p = models.CharField(_('phone privacy'), max_length=2, choices=SETTING_CHOICES, default=PUBLIC)
+    address_p = models.CharField(_('address privacy'), max_length=2, choices=SETTING_CHOICES, default=PUBLIC)
+    profile_p = models.CharField(_('profile privacy'), max_length=2, choices=SETTING_CHOICES, default=PUBLIC)
+
+    friend_list_p = models.CharField(_('friends privacy'), max_length=2, choices=SETTING_CHOICES, default=PUBLIC)
+
+    def __str__(self):
+        return 'Privacy Settings for {}'.format(self.owner.username)

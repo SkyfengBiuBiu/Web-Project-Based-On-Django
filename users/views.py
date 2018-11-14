@@ -9,8 +9,8 @@ from django.utils.http import urlsafe_base64_decode
 from django.views import generic
 from django.views.decorators.cache import never_cache
 
-from users.models import CustomUser
-from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomUserProfileFormSet
+from users.models import CustomUser, PrivacySettings
+from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomUserProfileFormSet, PrivacySettingsForm
 
 decorators = [never_cache, login_required]
 
@@ -95,6 +95,21 @@ class UserProfileView(generic.UpdateView):
     def get_success_url(self):
         messages.success(self.request, 'Your information saved.')
         return reverse_lazy('users:profile', kwargs=self.kwargs)
+
+
+# Privacy Settings View
+@method_decorator(login_required, name='dispatch')
+class PrivacySettingsView(generic.UpdateView):
+    template_name = 'users/user_privacy_settings.html'
+    pk_url_kwarg = 'user_id'
+    form_class = PrivacySettingsForm
+
+    def get_object(self, queryset=None):
+        return PrivacySettings.objects.get(pk=self.kwargs[PrivacySettingsView.pk_url_kwarg])
+
+    def get_success_url(self):
+        messages.success(self.request, 'Your information saved.')
+        return reverse_lazy('users:privacy_settings', kwargs=self.kwargs)
 
 
 @method_decorator(login_required, name='dispatch')

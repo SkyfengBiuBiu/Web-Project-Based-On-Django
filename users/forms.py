@@ -8,7 +8,7 @@ from django.template import loader
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
-from .models import CustomUser, CustomUserProfile
+from .models import CustomUser, CustomUserProfile, PrivacySettings
 
 
 # Normal User Forms
@@ -58,6 +58,8 @@ class CustomUserCreationForm(UserCreationForm):
         user = super(CustomUserCreationForm, self).save(commit=True)
         # Create an empty profile for users
         CustomUserProfile.objects.create(user=user)
+        # Create an privacy settings for users
+        PrivacySettings.objects.create(user=user)
         # Send validation Email on sign-up
         self.send_mail(self.request, user)
         return user
@@ -94,6 +96,21 @@ class CustomUserProfileChangeForm(forms.ModelForm):
 
 CustomUserProfileFormSet = inlineformset_factory(CustomUser, CustomUserProfile, form=CustomUserProfileChangeForm,
                                                  can_delete=False)
+
+
+class PrivacySettingsForm(forms.ModelForm):
+    class Meta:
+        model = PrivacySettings
+        fields = ['real_name_p', 'email_p', 'phone_p', 'address_p', 'profile_p', 'friend_list_p']
+
+    def __init__(self, *args, **kwargs):
+        super(PrivacySettingsForm, self).__init__(*args, **kwargs)
+        self.fields['real_name_p'].widget.attrs.update({'class': 'form-control'})
+        self.fields['email_p'].widget.attrs.update({'class': 'form-control'})
+        self.fields['phone_p'].widget.attrs.update({'class': 'form-control'})
+        self.fields['address_p'].widget.attrs.update({'class': 'form-control'})
+        self.fields['profile_p'].widget.attrs.update({'class': 'form-control'})
+        self.fields['friend_list_p'].widget.attrs.update({'class': 'form-control'})
 
 
 # Admin User Forms
