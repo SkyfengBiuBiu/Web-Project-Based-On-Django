@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'users/user_base.html' %}
 
 {% block title %}
     Email Validation on Sign-Up
@@ -6,10 +6,31 @@
 
 {% block content %}
     {% if valid_link %}
-        <p>Your account <a href="{% url 'login' %}">{{ username }}</a> is activated.</p>
-        <p>Thank you for using our website.</p>
+
+        <div class="container justify-content-center">
+            <h1 align="center">Your Account is Activated!</h1>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <p>Your account <a href="{% url 'login' %}">{{ username }}</a> is activated. Thank you for using our
+                        website.</p>
+                </div>
+            </div>
+        </div>
+
     {% else %}
-        <p>Sorry! This is an invalid link.</p>
-        <p>Please <a href="{% url 'users:signup' %}">Sign Up</a> or <a href="{% url 'login' %}">Log in</a>.</p>
+
+        <div class="container justify-content-center">
+            <h1 align="center">Invalid Link!</h1>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <p>Sorry! This is an invalid link.</p>
+                    <p>Please <a href="{% url 'users:signup' %}">Sign Up</a> or <a href="{% url 'login' %}">Log in</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+
     {% endif %}
 {% endblock %}

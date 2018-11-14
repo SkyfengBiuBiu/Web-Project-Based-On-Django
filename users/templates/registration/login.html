@@ -11,13 +11,60 @@
         <div class="row justify-content-center">
             <div class="col-md-4">
                 <form method="post">{% csrf_token %}
+                    <!-- Hidden Fields -->
+                    {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Username" id="id_username" name="username">
+                        {% if form.is_bound %}
+                            {% if form.username.errors %}
+                                <input type="text" class="form-control is-invalid" placeholder="Username"
+                                       id="id_username" name="username">
+                                {% for error in form.username.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <input type="text" class="form-control" placeholder="Username" id="id_username"
+                                       name="username">
+                            {% endif %}
+                        {% else %}
+                            <input type="text" class="form-control" placeholder="Username" id="id_username"
+                                   name="username">
+                        {% endif %}
                     </div>
+
                     <div class="form-group">
-                        <input type="password" class="form-control" placeholder="Password" id="id_password"
-                               name="password">
+                        {% if form.is_bound %}
+                            {% if form.password.errors %}
+                                <input type="password" class="form-control is-invalid" placeholder="Password"
+                                       id="id_password" name="password">
+                                {% for error in form.password.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <input type="password" class="form-control" placeholder="Password" id="id_password"
+                                       name="password">
+                            {% endif %}
+                        {% else %}
+                            <input type="password" class="form-control" placeholder="Password" id="id_password"
+                                   name="password">
+                        {% endif %}
                     </div>
+
+                    <!-- Errors -->
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>

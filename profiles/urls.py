@@ -8,8 +8,6 @@ urlpatterns = [
     path('', views.MyHomeView.as_view(), name='my_home'),
     path('<int:user_id>/home/', views.VisitingHomeView.as_view(), name='visit_home'),
 
-    path('<int:user_id>/settings/', views.SettingsView.as_view(), name='settings'),
-
     path('post/create/', views.PostCreateView.as_view(), name='post_create'),
     path('post/<int:post_id>/update/', views.PostUpdateView.as_view(), name='post_update'),
     path('post/<int:post_id>/delete/', views.PostDeleteView.as_view(), name='post_delete'),

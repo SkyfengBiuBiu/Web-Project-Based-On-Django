@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from discussions.models import Discussion
+
 
 
 # Create your models here.
@@ -12,7 +12,7 @@ class CustomUser(AbstractUser):
     email = models.EmailField(_('email address'), blank=False)
     phone = models.CharField(_('phone number'), max_length=20, blank=False)
     address = models.CharField(_('address'), max_length=254, blank=False)
-    discussions = models.ManyToManyField(Discussion)
+
     is_active = models.BooleanField(
         _('active'),
         default=False,
@@ -43,3 +43,26 @@ class CustomUserProfile(models.Model):
 
     def __str__(self):
         return 'Profile for user {}'.format(self.user.username)
+
+
+class PrivacySettings(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+
+    PUBLIC = 'pb'
+    FRIENDS = 'fr'
+    JUST_ME = 'jm'
+    SETTING_CHOICES = (
+        (PUBLIC, 'Public'),
+        (FRIENDS, 'Friends'),
+        (JUST_ME, 'Just me')
+    )
+    real_name_p = models.CharField(_('real name privacy'), max_length=2, choices=SETTING_CHOICES, default=PUBLIC)
+    email_p = models.CharField(_('email privacy'), max_length=2, choices=SETTING_CHOICES, default=PUBLIC)
+    phone_p = models.CharField(_('phone privacy'), max_length=2, choices=SETTING_CHOICES, default=PUBLIC)
+    address_p = models.CharField(_('address privacy'), max_length=2, choices=SETTING_CHOICES, default=PUBLIC)
+    profile_p = models.CharField(_('profile privacy'), max_length=2, choices=SETTING_CHOICES, default=PUBLIC)
+
+    friend_list_p = models.CharField(_('friends privacy'), max_length=2, choices=SETTING_CHOICES, default=PUBLIC)
+
+    def __str__(self):
+        return 'Privacy Settings for {}'.format(self.owner.username)

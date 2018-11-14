@@ -5,13 +5,6 @@ from users.models import CustomUser
 
 
 # Create your models here.
-class Profiles(models.Model):
-    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return 'Home Page for {}'.format(self.owner.username)
-
-
 class Post(models.Model):
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     created_time = models.DateTimeField(_('created time'), auto_now_add=True)

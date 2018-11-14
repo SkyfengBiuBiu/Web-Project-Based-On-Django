@@ -1,12 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import JsonResponse
-from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import generic
 
 from profiles.models import Post
-from users.models import CustomUser, CustomUserProfile
+from users.models import CustomUser
 
 post_page_size = 10
 friend_page_size = 10
@@ -50,7 +49,7 @@ class MyHomeView(ProfilesHomeView, generic.TemplateView):
     template_name = 'profiles/profile_home.html'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super(MyHomeView, self).get_context_data(**kwargs)
         owner = self.request.user
         return self.get_page_data(context, owner)
 
@@ -61,17 +60,9 @@ class VisitingHomeView(ProfilesHomeView, generic.TemplateView):
     pk_url_kwarg = 'user_id'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super(VisitingHomeView, self).get_context_data(**kwargs)
         owner = CustomUser.objects.get(pk=kwargs[self.pk_url_kwarg])
         return self.get_page_data(context, owner)
-
-
-# Profiles Settings View
-@method_decorator(login_required, name='dispatch')
-class SettingsView(generic.UpdateView):
-    template_name = 'profiles/profile_settings.html'
-    pk_url_kwarg = 'user_id'
-    success_url = reverse_lazy('profiles:settings')
 
 
 # Ajax Post Views
@@ -79,7 +70,7 @@ class SettingsView(generic.UpdateView):
 class PostCreateView(generic.CreateView):
     # @Todo
     def form_valid(self, form):
-        response = super().form_valid(form)
+        response = super(PostCreateView, self).form_valid(form)
         if self.request.is_ajax():
             data = {
                 'pk': self.object.pk
@@ -89,7 +80,7 @@ class PostCreateView(generic.CreateView):
             return response
 
     def form_invalid(self, form):
-        response = super().form_invalid(form)
+        response = super(PostCreateView, self).form_invalid(form)
         if self.request.is_ajax():
             return JsonResponse(form.errors, status=400)
         else:

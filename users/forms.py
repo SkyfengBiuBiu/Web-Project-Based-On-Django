@@ -8,7 +8,7 @@ from django.template import loader
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
-from .models import CustomUser, CustomUserProfile
+from .models import CustomUser, CustomUserProfile, PrivacySettings
 
 
 # Normal User Forms
@@ -16,6 +16,17 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser
         fields = ('first_name', 'last_name', 'username', 'email', 'phone', 'address')
+
+    def __init__(self, *args, **kwargs):
+        super(CustomUserCreationForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['last_name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['username'].widget.attrs.update({'class': 'form-control'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control'})
+        self.fields['phone'].widget.attrs.update({'class': 'form-control'})
+        self.fields['address'].widget.attrs.update({'class': 'form-control'})
+        self.fields['password1'].widget.attrs.update({'class': 'form-control'})
+        self.fields['password2'].widget.attrs.update({'class': 'form-control'})
 
     def send_mail(self, request, user):
         current_site = get_current_site(request)
@@ -44,9 +55,11 @@ class CustomUserCreationForm(UserCreationForm):
         email_message.send()
 
     def save(self, commit=True):
-        user = super().save(commit=True)
+        user = super(CustomUserCreationForm, self).save(commit=True)
         # Create an empty profile for users
         CustomUserProfile.objects.create(user=user)
+        # Create an privacy settings for users
+        PrivacySettings.objects.create(user=user)
         # Send validation Email on sign-up
         self.send_mail(self.request, user)
         return user
@@ -56,24 +69,48 @@ class CustomUserChangeForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ('first_name', 'last_name', 'phone', 'address')
-        widgets = {'first_name': forms.TextInput(attrs={'class': 'form-control'}),
-                   'last_name': forms.TextInput(attrs={'class': 'form-control'}),
-                   'phone': forms.TextInput(attrs={'class': 'form-control'}),
-                   'address': forms.TextInput(attrs={'class': 'form-control'})}
+
+    def __init__(self, *args, **kwargs):
+        super(CustomUserChangeForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['last_name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['phone'].widget.attrs.update({'class': 'form-control'})
+        self.fields['address'].widget.attrs.update({'class': 'form-control'})
 
 
 class CustomUserProfileChangeForm(forms.ModelForm):
     class Meta:
         model = CustomUserProfile
         fields = ['gender', 'age', 'date_of_birth', 'photo']
-        widgets = {'gender': forms.Select(attrs={'class': 'form-control'}),
-                   'age': forms.NumberInput(attrs={'class': 'form-control'}),
-                   'date_of_birth': forms.DateTimeInput(attrs={'class': 'form-control'}),
-                   'photo': forms.FileInput(attrs={'class': 'form-control'})}
+        widgets = {
+            'photo': forms.ClearableFileInput(attrs={'class': 'form-control'})
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CustomUserProfileChangeForm, self).__init__(*args, **kwargs)
+        self.fields['gender'].widget.attrs.update({'class': 'form-control'})
+        self.fields['age'].widget.attrs.update({'class': 'form-control'})
+        self.fields['date_of_birth'].widget.attrs.update({'class': 'form-control'})
+        self.fields['photo'].widget.attrs.update({'class': 'form-control'})
 
 
 CustomUserProfileFormSet = inlineformset_factory(CustomUser, CustomUserProfile, form=CustomUserProfileChangeForm,
                                                  can_delete=False)
+
+
+class PrivacySettingsForm(forms.ModelForm):
+    class Meta:
+        model = PrivacySettings
+        fields = ['real_name_p', 'email_p', 'phone_p', 'address_p', 'profile_p', 'friend_list_p']
+
+    def __init__(self, *args, **kwargs):
+        super(PrivacySettingsForm, self).__init__(*args, **kwargs)
+        self.fields['real_name_p'].widget.attrs.update({'class': 'form-control'})
+        self.fields['email_p'].widget.attrs.update({'class': 'form-control'})
+        self.fields['phone_p'].widget.attrs.update({'class': 'form-control'})
+        self.fields['address_p'].widget.attrs.update({'class': 'form-control'})
+        self.fields['profile_p'].widget.attrs.update({'class': 'form-control'})
+        self.fields['friend_list_p'].widget.attrs.update({'class': 'form-control'})
 
 
 # Admin User Forms
@@ -109,7 +146,7 @@ class CustomUserAdminCreationForm(UserCreationForm):
         email_message.send()
 
     def save(self, commit=True):
-        user = super().save(commit=True)
+        user = super(CustomUserAdminCreationForm, self).save(commit=True)
         # Create an empty profile for users
         CustomUserProfile.objects.create(user=user)
         # Send validation Email on sign-up
