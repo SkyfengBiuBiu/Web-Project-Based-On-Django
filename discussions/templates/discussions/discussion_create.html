@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Create your own discussion
+{% endblock %}
+
+{% block content %}
+    <div class="container justify-content-center">
+        <h1 align="center">Create your own discussion</h1>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form method="post">{% csrf_token %}
+                    <!-- Hidden Fields -->
+                    {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+
+                    <!-- Errors -->
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <!-- Visible Fields -->
+                    {% for field in form.visible_fields %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+
+                            {% if form.is_bound %}
+                                {% if field.errors %}
+                                    {{ field }}
+                                    {% for error in field.errors %}
+                                        <div class="invalid-feedback">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    {{ field }}
+                                {% endif %}
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+
+                            {% if field.help_text %}
+                                <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
