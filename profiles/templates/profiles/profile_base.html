@@ -29,39 +29,11 @@
                         <li class="list-group-item">Phone: {{ user.phone }}</li>
                         <li class="list-group-item">Address: {{ user.address }}</li>
                     </ul>
-                    <div class="card-body">
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
-                    </div>
                     <div class="card-footer text-muted">
                         Last login: {{ user.last_login }}
                     </div>
                 </div>
                 <!-- User Personal Information end -->
-
-                <!-- Friends List start -->
-                <div class="card post-card">
-                    <div class="card-header">
-                        <h5 class="card-title">Friends List</h5>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        {% for friend in friend_list %}
-                            <li class="list-group-item">
-                                <a href="{% url 'profiles:visit_home' friend.id %}">
-                                    <img class="rounded-circle" width="20" src="https://picsum.photos/50/50"
-                                         alt="{{ friend.username }}'s Profile Photo">
-                                    <span>{{ friend.username }}</span>
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    <div class="card-footer">
-                        <a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a>
-                        <a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a>
-                        <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
-                    </div>
-                </div>
-                <!-- Friends List end -->
             </div>
 
             <!-- Right Side start -->
