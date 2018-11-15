@@ -2,16 +2,16 @@ from django.db import models
 from users.models import CustomUser
 # Create your models here.
 class Friendship(models.Model):
-    user1 = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    user2 = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user1 = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='user1')
+    user2 = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='user2')
     date = models.DateTimeField("request published")
 
     class Meta:
-        ordering = ["headline"]
+        ordering = ["date"]
 
 class FriendshipRequest(models.Model):
-    sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    recipient = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='sender')
+    recipient = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='recipient')
     date = models.DateTimeField("chat published")
     status = models.IntegerField(default=0)
 

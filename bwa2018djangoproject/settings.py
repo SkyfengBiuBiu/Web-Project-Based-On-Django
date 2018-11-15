@@ -26,7 +26,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = "7rf22yx3#lm(+d25m-_2kl(%wtvm=(%j7%m0&!20%e2r2283+p"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG =True
 
 # Application definition
 
@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     # Local Apps
     'users.apps.UsersConfig',
     'profiles.apps.ProfilesConfig',
+    'discussions.apps.DiscussionsConfig',
+    'friendships.apps.FriendshipsConfig',
     # Django Apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -87,17 +89,17 @@ DATABASES = {
         # The default database that "ships with" Django is sqliteself.
         # Two lines under this defines the database. If your group uses
         # PostgreSQL, comment these lines out.
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 
         # If your group uses PostgreSQL comment out two lines under this,
         # and add other needed settings.
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'bwa2018djangoproject',
+        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        #'NAME': 'bwa2018djangoproject',
         # if you want to define user, password etc.
         # do it here
-        # 'USER': 'postgres',
-        # 'PASSWORD': 'root'
+        #'USER': 'postgres',
+        #'PASSWORD': 'root'
     }
 }
 

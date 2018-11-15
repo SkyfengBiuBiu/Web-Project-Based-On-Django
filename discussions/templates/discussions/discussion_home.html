@@ -12,9 +12,34 @@
     </p>
     <a href="{% url 'discussions:discussion_detail' discussion.id %}"></a>
     <br>
-{% endfor %}
     <form method="post" action="">
     {% csrf_token %}
     <input type="submit" value="leave" />
     </form>
+{% endfor %}
+<form class="form-inline ml-auto">
+<a class="btn btn-outline-primary mx-sm-1" href="{% url 'discussions:discussion_create' user_id=uid %}">Create your discussion</a>
+</form>
+{% endblock %}
+{% block script %}
+<script>
+ $(document).ready(function() {
+    updateMsg();
+    console.log(1);
+});
+
+
+function updateMsg() {
+    $.post(
+    	"./post/",
+    	{
+    		post_type: "get_chat",
+			last_chat_id: $(".chat_id").last().val()
+		},
+		function(data) {
+        	$('.list-group-item').append(data);
+    });
+    setTimeout("updateMsg()", 5000);
+}
+</script>
 {% endblock %}
