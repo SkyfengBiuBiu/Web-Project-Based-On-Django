@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # Local Apps
     'users.apps.UsersConfig',
     'profiles.apps.ProfilesConfig',
+
     # Django Apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -96,8 +97,8 @@ DATABASES = {
         'NAME': 'bwa2018djangoproject',
         # if you want to define user, password etc.
         # do it here
-        # 'USER': 'postgres',
-        # 'PASSWORD': 'root'
+        'USER': 'postgres',
+        'PASSWORD': 'root'
     }
 }
 

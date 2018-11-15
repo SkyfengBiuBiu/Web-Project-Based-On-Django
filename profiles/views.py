@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import generic
@@ -75,23 +75,29 @@ class PostCreateView(generic.CreateView):
     form_class = PostForm
     success_url = reverse_lazy('profiles:my_home')
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.is_ajax():
+            return super(PostCreateView, self).dispatch(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse_lazy('profiles:my_home'))
+
     def form_valid(self, form):
-        form.owner = self.request.user
-        response = super(PostCreateView, self).form_valid(form)
         if self.request.is_ajax():
+            form.owner = self.request.user
+            response = super(PostCreateView, self).form_valid(form)
             data = {
-                'message': 'Done'
+                'message': 'You have made a new posts.'
             }
             return JsonResponse(data)
         else:
-            return response
+            return HttpResponseRedirect(reverse_lazy('profiles:my_home'))
 
     def form_invalid(self, form):
-        response = super(PostCreateView, self).form_invalid(form)
         if self.request.is_ajax():
+            response = super(PostCreateView, self).form_invalid(form)
             return JsonResponse(form.errors, status=400)
         else:
-            return response
+            return HttpResponseRedirect(reverse_lazy('profiles:my_home'))
 
 
 @method_decorator(login_required, name='dispatch')
@@ -114,6 +120,12 @@ class PostListView(ProfilesHomeView, generic.ListView):
     pk_url_kwarg = 'user_id'
     page_kwarg = 'page_no'
     model = Post
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.is_ajax():
+            return super(PostListView, self).dispatch(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse_lazy('profiles:my_home'))
 
     def get_context_data(self, **kwargs):
         context = super(PostListView, self).get_context_data(**kwargs)
