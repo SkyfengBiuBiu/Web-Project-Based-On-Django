@@ -131,6 +131,7 @@ class PostListView(ProfilesHomeView, generic.ListView):
         context = super(PostListView, self).get_context_data(**kwargs)
         owner = CustomUser.objects.get(pk=self.kwargs[PostListView.pk_url_kwarg])
         page_no = self.kwargs[PostListView.page_kwarg]
+        context['owner'] = owner
         context['post_list'] = self.get_posts(owner, page_no)
         return context
 

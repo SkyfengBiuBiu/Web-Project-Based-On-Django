@@ -118,7 +118,7 @@
                     success: function (response) {
                         console.log(response)
                         $("#id_post_create_div").load("{% url 'profiles:post_create' %}", refreshForms); // reset form
-                        $("#id_post_list").load("{% url 'profiles:post_list' user.id 1 %}", refreshPosts); // refresh posts list
+                        $("#id_post_list").load("{% url 'profiles:post_list' owner.id 1 %}", refreshPosts); // refresh posts list
                         $("#id_ajax_notification_body").html(response.message);
                         // message notification
                         $("#id_ajax_notification").modal('toggle');

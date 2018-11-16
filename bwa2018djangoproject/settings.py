@@ -166,5 +166,5 @@ AUTH_USER_MODEL = 'users.CustomUser'
 
 # Login and Logout Redirect URL
 LOGIN_REDIRECT_URL = 'profiles:my_home'
-LOGIN_URL = 'users/login'
+LOGIN_URL = '/users/login'
 LOGOUT_REDIRECT_URL = '/users/login'
