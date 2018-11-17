@@ -22,8 +22,7 @@ class DiscussionCreationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(DiscussionCreationForm, self).__init__(*args, **kwargs)
         self.fields['topic'].widget.attrs.update({'class': 'form-control'})
-        self.fields['users'].widget.attrs.update({'class': 'form-control'})
-
+        self.fields['users'] = forms.ModelMultipleChoiceField(CustomUser.objects.all(),widget=forms.CheckboxSelectMultiple())
 
     def save(self, commit=True):
         self.instance.creator=self.creator
