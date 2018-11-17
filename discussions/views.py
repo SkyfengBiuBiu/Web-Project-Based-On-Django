@@ -18,7 +18,7 @@ from django.utils.decorators import method_decorator
 def home(request,user_id):
     context = {}
     try:
-        uid = user_id
+        uid = request.user.id
         user_discussions=Discussion.objects.filter(users=uid)
         creator_discussions=Discussion.objects.filter(creator=uid)
         all_discussions = user_discussions|creator_discussions
@@ -43,13 +43,6 @@ class CreateDiscussionView(generic.CreateView):
         form.creator=self.request.user
         return super(CreateDiscussionView, self).form_valid(form)
 
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs['creator'] = self.request.user
-    #     return kwargs
-
-class CreateDoneView(generic.TemplateView):
-    template_name = 'discussions/discussion_done.html'
 
 def datail(request,discussion_id):
     try:
@@ -78,15 +71,6 @@ def datail(request,discussion_id):
     else:
         raise Http404
 
-
-@method_decorator(login_required, name='dispatch')
-class CustomUserLeaveView(generic.DeleteView):
-    template_name = 'users/user_confirm_delete.html'
-    pk_url_kwarg = 'user_id'
-    model = CustomUser
-
-    def get_success_url(self):
-        return reverse_lazy('users:delete_done')
 
 
 def leave(request,discussion_id,user_id):
