@@ -93,24 +93,7 @@ def detail(request,discussion_id):
 
                     ChatMessage.objects.filter(discussion=discussion_id, user_id=user_id, id=id).delete()
 
-    if request.method == 'POST':
-        post_type = request.POST.get('post_type')
-        if post_type == 'send_chat':
-            new_chat = ChatMessage.objects.create(
-                content = request.POST.get('content'),
-                user = request.user,
-                headline=timezone.localtime(timezone.now()).strftime("%Y-%m-%d %H:%M:%S"),
-            )
-            new_chat.save()
-            return HttpResponse()
-
-        elif post_type == 'get_chat':
-            last_chat_id = int(request.POST.get('last_chat_id'))
-            chats = discussion.chatMessage
-            chats = chats.objects.filter(id__gt = last_chat_id)
-            return render(request, 'discussions/discussion_detail.html', {'chats': chats})
-    else:
-        raise Http404
+        return HttpResponseRedirect('/discussions/%s/detail' % discussion_id)
 
 
 @method_decorator(login_required, name='dispatch')
