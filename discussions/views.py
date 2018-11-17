@@ -9,34 +9,38 @@ from django.http import HttpResponse
 from django.views import generic
 from .forms import DiscussionCreationForm
 from django.urls import reverse_lazy
-
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 # Create your views here.
 def home(request,user_id):
     context = {}
-    uid = user_id
-    context['uid'] = uid
     try:
+        uid = user_id
         user_discussions=Discussion.objects.filter(users=uid)
-        context['discussions'] = user_discussions
+        creator_discussions=Discussion.objects.filter(creator=uid)
+        all_discussions = user_discussions|creator_discussions
+        context['user_id']=uid
+        context['discussions'] = all_discussions
     except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist, ValidationError):
         user_discussions = None
     return HttpResponse(render(request, 'discussions/discussion_home.html', context))
 
+# Ajax Post Views
+
 class CreateDiscussionView(generic.CreateView):
     template_name = 'discussions/discussion_create.html'
     form_class = DiscussionCreationForm
-    success_url = reverse_lazy('discussions:create_done')
+    success_url = reverse_lazy('discussions:discussion_home')
 
-    def get_user(self):
-        try:
-            user = CustomUser.objects.get(pk=1)
-        except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist, ValidationError):
-            user = None
-        return user
+    def get_success_url(self):
+        id =self.request.user.id
+        return reverse_lazy('discussions:discussion_home', kwargs={'user_id': id})
 
     def form_valid(self, form):
-        form.request = self.request
-        form.owner=self.request.user
+        form.creator=self.request.user
         return super(CreateDiscussionView, self).form_valid(form)
 
 
@@ -45,6 +49,13 @@ class CreateDoneView(generic.TemplateView):
     template_name = 'discussions/discussion_done.html'
 
 def datail(request,discussion_id):
+    try:
+        discussion = Discussion.objects.get(pk=discussion_id)
+        chats = discussion.chatMessage.all()
+    except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist, ValidationError):
+        discussion = None
+    render(request, 'discussions/discussion_detail.html', {'chats': chats})
+
     if request.method == 'POST':
         post_type = request.POST.get('post_type')
         if post_type == 'send_chat':
@@ -58,14 +69,6 @@ def datail(request,discussion_id):
 
         elif post_type == 'get_chat':
             last_chat_id = int(request.POST.get('last_chat_id'))
-
-            try:
-                # urlsafe_base64_decode() decodes to byte string
-                uid = urlsafe_base64_decode(discussion_id).decode()
-                discussion = Discussion.objects.get(pk=uid)
-            except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist, ValidationError):
-                discussion = None
-
             chats = discussion.chatMessage
             chats = chats.objects.filter(id__gt = last_chat_id)
             return render(request, 'discussions/discussion_detail.html', {'chats': chats})
@@ -73,3 +76,26 @@ def datail(request,discussion_id):
         raise Http404
 
 
+@method_decorator(login_required, name='dispatch')
+class CustomUserLeaveView(generic.DeleteView):
+    template_name = 'users/user_confirm_delete.html'
+    pk_url_kwarg = 'user_id'
+    model = CustomUser
+
+    def get_success_url(self):
+        return reverse_lazy('users:delete_done')
+
+
+def leave(request,discussion_id,user_id):
+    context = {}
+    try:
+        discussion = Discussion.objects.get(pk=discussion_id)
+        user=CustomUser.objects.get(pk=user_id)
+        discussion.users.remove(user)
+        Discussion.objects.filter(users__isnull=True).delete()
+        discussion = Discussion.objects.filter(users=user_id)
+        context['user_id'] = user_id
+        context['discussions'] = discussion
+    except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist, ValidationError):
+        discussion = None
+    return HttpResponse(render(request, 'discussions/discussion_home.html', context))

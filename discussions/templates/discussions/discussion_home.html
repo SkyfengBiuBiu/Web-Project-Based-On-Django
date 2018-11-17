@@ -3,43 +3,21 @@
 {% block content %}
 <h2>Discussion</h2>
 {% for discussion in discussions %}
-    <h4 class="list-group-item-heading">{{discussion.creator}}:{{discussion.id}}</h4>
+    <h4 class="list-group-item-heading">{{discussion.id}}:{{discussion.topic}}</h4>
     <p class="list-group-item-text">
-    {% for user in discussion.users %}
-        <p>{{user.last_name}}</p>
-        <p>{{user.first_name}}</p>
+     {% for user in discussion.users.all.distinct %}
+        First name:<p>{{user.last_name}}</p>
+        Last name :<p>{{user.first_name}}</p>
     {% endfor %}
     </p>
-    <a href="{% url 'discussions:discussion_detail' discussion.id %}"></a>
+    <a href="{% url 'discussions:discussion_detail' discussion.id %}">Enroll</a>
     <br>
-    <form method="post" action="">
-    {% csrf_token %}
-    <input type="submit" value="leave" />
+    <form class="form-inline ml-auto">
+    <a class="btn btn-outline-primary mx-sm-1" href="{% url 'discussions:discussion_confirm_leave' discussion.id user_id%}">Leave</a>
     </form>
 {% endfor %}
 <form class="form-inline ml-auto">
-<a class="btn btn-outline-primary mx-sm-1" href="{% url 'discussions:discussion_create' user_id=uid %}">Create your discussion</a>
+<a class="btn btn-outline-primary mx-sm-1" href="{% url 'discussions:discussion_create' %}">Create your discussion</a>
 </form>
 {% endblock %}
-{% block script %}
-<script>
- $(document).ready(function() {
-    updateMsg();
-    console.log(1);
-});
 
-
-function updateMsg() {
-    $.post(
-    	"./post/",
-    	{
-    		post_type: "get_chat",
-			last_chat_id: $(".chat_id").last().val()
-		},
-		function(data) {
-        	$('.list-group-item').append(data);
-    });
-    setTimeout("updateMsg()", 5000);
-}
-</script>
-{% endblock %}

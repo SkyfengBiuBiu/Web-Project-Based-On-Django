@@ -13,6 +13,8 @@ from .models import Discussion,CustomUser
 
 # Normal User Forms
 class DiscussionCreationForm(forms.ModelForm):
+    #users=forms.MultipleChoiceField()
+
     class Meta():
         model = Discussion
         fields = ('topic', 'users')
@@ -23,15 +25,9 @@ class DiscussionCreationForm(forms.ModelForm):
         self.fields['users'].widget.attrs.update({'class': 'form-control'})
 
 
-
     def save(self, commit=True):
-        
-        discussion = super(DiscussionCreationForm, self).save(commit=True)
-        # Create an empty profile for users
-        uid=self.request.id;
-        discussion.creator=CustomUser.objects.get(pk=1);
-        Discussion.objects.create(discussion=discussion)
-        # Create an privacy settings for users
-        return discussion
+        self.instance.creator=self.creator
+        return super(forms.ModelForm, self).save(commit=True)
+
 
 
