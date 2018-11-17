@@ -1,16 +1,16 @@
-{% extends 'users/user_base.html' %}
+{% extends 'base.html' %}
 
 {% block title %}
-    Check your email box
+    Check your discussion list
 {% endblock %}
 
 {% block content %}
     <div class="container justify-content-center">
-        <h1 align="center">Finish Your Registration!</h1>
+        <h1 align="center">Establish your discussion group!</h1>
 
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <p>A validation email has been sent. Please check your email box and finish your registration.</p>
+                <a href="{% url 'discussions:discussion_detail' discussion.id %}">Enroll your discussion group!</a>
             </div>
         </div>
     </div>

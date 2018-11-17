@@ -24,7 +24,7 @@
 <!-- Breadcrumbs -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <!-- Site Brand -->
-    <a class="navbar-brand" href="{% url 'profiles:my_home' %}">
+    <a class="navbar-brand" href="{% url 'index' %}">
         <img src="" alt="">Group003 SNS
     </a>
 
@@ -40,7 +40,7 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <!-- Search Form -->
-                    <form class="form-inline mt-2 mt-md-0">
+                    <form class="form-inline mt-2 mt-md-0">{% csrf_token %}
                         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
                     </form>
@@ -76,10 +76,12 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userHeadImg">
                         <a class="dropdown-item" href="{% url 'users:profile' user.id %}">Profile</a>
-                        <a class="dropdown-item" href="{% url 'profiles:settings' user.id %}">Settings</a>
+                        <a class="dropdown-item" href="{% url 'users:privacy_settings' user.id %}">Privacy
+                            Settings</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'password_change' %}">Change Password</a>
                         <a class="dropdown-item" href="{% url 'password_reset' %}">Reset Password</a>
+                        <a class="dropdown-item" href="{% url 'users:delete' user.id %}">Delete Account</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'logout' %}">Log out</a>
                     </div>
@@ -95,31 +97,20 @@
 </nav>
 
 <main>
-    <!-- Messages -->
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong>Holy guacamole!</strong> You should check in on some of those fields below.
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        {% endfor %}
-    {% endif %}
-
     {% block content %}
     {% endblock %}
 </main>
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+
+{% block js-extra-script %}
+{% endblock %}
 </body>
 </html>

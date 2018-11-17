@@ -5,18 +5,21 @@ from users.models import CustomUser
 
 
 # Create your models here.
-class Profiles(models.Model):
-    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return 'Home Page for {}'.format(self.owner.username)
-
-
 class Post(models.Model):
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     created_time = models.DateTimeField(_('created time'), auto_now_add=True)
     last_modified = models.DateTimeField(_('last modified'), auto_now=True)
     content = models.CharField(_('post'), max_length=140)
+
+    PUBLIC = 'pb'
+    FRIENDS = 'fr'
+    JUST_ME = 'jm'
+    SETTING_CHOICES = (
+        (PUBLIC, 'Public'),
+        (FRIENDS, 'Friends'),
+        (JUST_ME, 'Just me')
+    )
+    privacy_level = models.CharField(_('privacy level'), max_length=2, choices=SETTING_CHOICES, default=PUBLIC)
 
     class Meta:
         ordering = ['-created_time', '-last_modified']

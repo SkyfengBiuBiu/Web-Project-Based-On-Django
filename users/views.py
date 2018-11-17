@@ -3,14 +3,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.http import urlsafe_base64_decode
 from django.views import generic
 from django.views.decorators.cache import never_cache
 
-from users.models import CustomUser
-from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomUserProfileFormSet
+from users.models import CustomUser, PrivacySettings
+from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomUserProfileFormSet, PrivacySettingsForm
 
 decorators = [never_cache, login_required]
 
@@ -23,7 +24,7 @@ class SignUpView(generic.CreateView):
 
     def form_valid(self, form):
         form.request = self.request
-        return super().form_valid(form)
+        return super(SignUpView, self).form_valid(form)
 
 
 class SignUpDoneView(generic.TemplateView):
@@ -46,7 +47,7 @@ class SignUpConfirmView(generic.TemplateView):
                 self.user.save()
                 self.valid_link = True
 
-        return super().dispatch(*args, **kwargs)
+        return super(SignUpConfirmView, self).dispatch(*args, **kwargs)
 
     def get_user(self, uidb64):
         try:
@@ -58,7 +59,7 @@ class SignUpConfirmView(generic.TemplateView):
         return user
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super(SignUpConfirmView, self).get_context_data(**kwargs)
         context['valid_link'] = self.valid_link
         context['username'] = self.user.username
         return context
@@ -70,6 +71,12 @@ class UserProfileView(generic.UpdateView):
     pk_url_kwarg = 'user_id'
     form_class = CustomUserChangeForm
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.id != self.kwargs[UserProfileView.pk_url_kwarg]:
+            self.kwargs[UserProfileView.pk_url_kwarg] = request.user.id
+            return HttpResponseRedirect(reverse_lazy('users:profile', kwargs=self.kwargs))
+        return super(UserProfileView, self).dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         context = self.get_context_data()
         profile = context['profile']
@@ -79,10 +86,10 @@ class UserProfileView(generic.UpdateView):
             if profile.is_valid():
                 profile.instance = self.object
                 profile.save()
-        return super().form_valid(form)
+        return super(UserProfileView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super(UserProfileView, self).get_context_data(**kwargs)
         if self.request.POST:
             context['profile'] = CustomUserProfileFormSet(self.request.POST, self.request.FILES, instance=self.object)
         else:
@@ -93,8 +100,29 @@ class UserProfileView(generic.UpdateView):
         return CustomUser.objects.get(pk=self.kwargs[UserProfileView.pk_url_kwarg])
 
     def get_success_url(self):
-        messages.success(self.request, 'Your information saved.')
+        messages.success(self.request, 'Profile information updated.', extra_tags='alert-success')
         return reverse_lazy('users:profile', kwargs=self.kwargs)
+
+
+# Privacy Settings View
+@method_decorator(login_required, name='dispatch')
+class PrivacySettingsView(generic.UpdateView):
+    template_name = 'users/user_privacy_settings.html'
+    pk_url_kwarg = 'user_id'
+    form_class = PrivacySettingsForm
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.id != self.kwargs[PrivacySettingsView.pk_url_kwarg]:
+            self.kwargs[PrivacySettingsView.pk_url_kwarg] = request.user.id
+            return HttpResponseRedirect(reverse_lazy('users:privacy_settings', kwargs=self.kwargs))
+        return super(PrivacySettingsView, self).dispatch(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        return PrivacySettings.objects.get(pk=self.kwargs[PrivacySettingsView.pk_url_kwarg])
+
+    def get_success_url(self):
+        messages.success(self.request, 'Privacy settings updated.', extra_tags='alert-success')
+        return reverse_lazy('users:privacy_settings', kwargs=self.kwargs)
 
 
 @method_decorator(login_required, name='dispatch')
@@ -102,7 +130,15 @@ class CustomUserDeleteView(generic.DeleteView):
     template_name = 'users/user_confirm_delete.html'
     pk_url_kwarg = 'user_id'
     model = CustomUser
-    success_url = reverse_lazy('users:delete_done')
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.id != self.kwargs[CustomUserDeleteView.pk_url_kwarg]:
+            self.kwargs[CustomUserDeleteView.pk_url_kwarg] = request.user.id
+            return HttpResponseRedirect(reverse_lazy('users:delete', kwargs=self.kwargs))
+        return super(CustomUserDeleteView, self).dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse_lazy('users:delete_done')
 
 
 class CustomUserDeleteDoneView(generic.TemplateView):

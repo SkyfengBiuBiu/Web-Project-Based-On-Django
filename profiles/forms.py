@@ -3,18 +3,14 @@ from django import forms
 from profiles.models import Post, Comment
 
 
-class ProfileForm():
-    pass
-
-
-class ProfileSettingsForm(forms.ModelForm):
-    pass
-
-
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['content']
+        fields = ['content', 'privacy_level']
+
+    def save(self, commit=True):
+        self.instance.owner = self.owner
+        return super(forms.ModelForm, self).save(commit=True)
 
 
 class CommentForm(forms.ModelForm):
