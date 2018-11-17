@@ -4,11 +4,12 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import generic
+from django.views.decorators.csrf import csrf_protect
 
 from friendships.models import Friendship
 from profiles.forms import PostForm
 from profiles.models import Post
-from users.models import CustomUser
+from users.models import CustomUser, PrivacySettings
 
 post_page_size = 5
 friend_page_size = 10
@@ -67,8 +68,19 @@ class VisitingHomeView(ProfilesHomeView, generic.TemplateView):
     pk_url_kwarg = 'user_id'
 
     def get_context_data(self, **kwargs):
+        user = self.request.user
+
         context = super(VisitingHomeView, self).get_context_data(**kwargs)
         owner = CustomUser.objects.get(pk=kwargs[self.pk_url_kwarg])
+        privacy_settings = PrivacySettings.objects.get(user=owner)
+
+        # Permission Authentication
+        privacy_settings.email_p = user.has_privacy_perm(owner, privacy_settings.email_p)
+        privacy_settings.phone_p = user.has_privacy_perm(owner, privacy_settings.phone_p)
+        privacy_settings.address_p = user.has_privacy_perm(owner, privacy_settings.address_p)
+        privacy_settings.friend_list_p = user.has_privacy_perm(owner, privacy_settings.friend_list_p)
+        context['privacy_settings'] = privacy_settings
+
         return self.get_page_data(context, owner)
 
 
@@ -80,6 +92,7 @@ class PostCreateView(generic.CreateView):
     form_class = PostForm
     success_url = reverse_lazy('profiles:my_home')
 
+    @method_decorator(csrf_protect)
     def dispatch(self, request, *args, **kwargs):
         if request.is_ajax():
             return super(PostCreateView, self).dispatch(request, *args, **kwargs)
@@ -126,6 +139,7 @@ class PostListView(ProfilesHomeView, generic.ListView):
     page_kwarg = 'page_no'
     model = Post
 
+    @method_decorator(csrf_protect)
     def dispatch(self, request, *args, **kwargs):
         if request.is_ajax():
             return super(PostListView, self).dispatch(request, *args, **kwargs)
@@ -134,7 +148,7 @@ class PostListView(ProfilesHomeView, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(PostListView, self).get_context_data(**kwargs)
-        owner = CustomUser.objects.get(pk=self.kwargs[PostListView.pk_url_kwarg])
+        owner = CustomUser.objects.get(pk=self.kwargs[self.pk_url_kwarg])
         page_no = self.kwargs[PostListView.page_kwarg]
         context['owner'] = owner
         context['post_list'] = self.get_posts(owner, page_no)

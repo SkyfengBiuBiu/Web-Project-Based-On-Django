@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMultiAlternatives
@@ -8,6 +8,7 @@ from django.forms import inlineformset_factory
 from django.template import loader
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+from django.utils.translation import ugettext_lazy as _
 
 from .models import CustomUser, CustomUserProfile, PrivacySettings
 
@@ -16,7 +17,7 @@ from .models import CustomUser, CustomUserProfile, PrivacySettings
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser
-        fields = ('first_name', 'last_name', 'username', 'email', 'phone', 'address')
+        fields = ('username', 'email', 'first_name', 'last_name', 'phone', 'address')
 
     def __init__(self, *args, **kwargs):
         super(CustomUserCreationForm, self).__init__(*args, **kwargs)
@@ -118,6 +119,30 @@ class PrivacySettingsForm(forms.ModelForm):
         self.fields['address_p'].widget.attrs.update({'class': 'form-control'})
         self.fields['profile_p'].widget.attrs.update({'class': 'form-control'})
         self.fields['friend_list_p'].widget.attrs.update({'class': 'form-control'})
+
+
+class CustomPasswordResetForm(PasswordResetForm):
+    error_messages = {'username_email_mismatch': _("The username and email fields didn't match.")}
+
+    username = forms.CharField(label=_("Username"), max_length=150)
+
+    def __init__(self, *args, **kwargs):
+        super(CustomPasswordResetForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class': 'form-control'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control'})
+
+    def _post_clean(self):
+        super()._post_clean()
+        # Validate username and email address
+        try:
+            username = self.cleaned_data.get('username')
+            email = self.cleaned_data.get('email')
+            CustomUser.objects.get(email=email, username=username)
+        except CustomUser.DoesNotExist:
+            self.add_error(field='username', error=forms.ValidationError(
+                self.error_messages['username_email_mismatch'],
+                code='username_email_mismatch',
+            ))
 
 
 # Admin User Forms

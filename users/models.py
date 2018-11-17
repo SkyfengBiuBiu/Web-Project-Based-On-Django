@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -14,6 +15,19 @@ class CustomUser(AbstractUser):
 
     class Meta(AbstractUser.Meta):
         ordering = ['-date_joined']
+
+    def has_privacy_perm(self, user, permission):
+        if PrivacySettings.PUBLIC == permission:
+            return True
+        elif PrivacySettings.FRIENDS == permission:
+            from friendships.models import Friendship
+            friendship = Friendship.objects.filter(Q(user1=self, user2=user) | Q(user1=user, user2=self))
+            if friendship.exists():
+                return True
+            return False
+        elif PrivacySettings.JUST_ME == permission:
+            return False
+        return False
 
 
 class CustomUserProfile(models.Model):

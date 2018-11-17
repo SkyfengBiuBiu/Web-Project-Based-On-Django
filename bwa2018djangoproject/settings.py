@@ -26,7 +26,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = "7rf22yx3#lm(+d25m-_2kl(%wtvm=(%j7%m0&!20%e2r2283+p"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =True
+DEBUG = True
 
 # Application definition
 
@@ -94,8 +94,8 @@ DATABASES = {
 
         # If your group uses PostgreSQL comment out two lines under this,
         # and add other needed settings.
-        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        #'NAME': 'bwa2018djangoproject',
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': 'bwa2018djangoproject',
         # if you want to define user, password etc.
         # do it here
         # 'USER': 'postgres',

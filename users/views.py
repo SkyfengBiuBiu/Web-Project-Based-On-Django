@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.views import PasswordResetView
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.http import HttpResponseRedirect
@@ -9,9 +10,11 @@ from django.utils.decorators import method_decorator
 from django.utils.http import urlsafe_base64_decode
 from django.views import generic
 from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
 
 from users.models import CustomUser, PrivacySettings
-from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomUserProfileFormSet, PrivacySettingsForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomUserProfileFormSet, PrivacySettingsForm, \
+    CustomPasswordResetForm
 
 decorators = [never_cache, login_required]
 
@@ -36,6 +39,7 @@ class SignUpConfirmView(generic.TemplateView):
     token_generator = default_token_generator
 
     @method_decorator(never_cache)
+    @method_decorator(csrf_protect)
     def dispatch(self, *args, **kwargs):
         self.user = self.get_user(kwargs['uidb64'])
         self.valid_link = False
@@ -65,15 +69,21 @@ class SignUpConfirmView(generic.TemplateView):
         return context
 
 
+# Password Reset View
+class CustomPasswordResetView(PasswordResetView):
+    form_class = CustomPasswordResetForm
+
+
 @method_decorator(login_required, name='dispatch')
 class UserProfileView(generic.UpdateView):
     template_name = 'users/user_profile.html'
     pk_url_kwarg = 'user_id'
     form_class = CustomUserChangeForm
 
+    @method_decorator(csrf_protect)
     def dispatch(self, request, *args, **kwargs):
-        if request.user.id != self.kwargs[UserProfileView.pk_url_kwarg]:
-            self.kwargs[UserProfileView.pk_url_kwarg] = request.user.id
+        if request.user.id != self.kwargs[self.pk_url_kwarg]:
+            self.kwargs[self.pk_url_kwarg] = request.user.id
             return HttpResponseRedirect(reverse_lazy('users:profile', kwargs=self.kwargs))
         return super(UserProfileView, self).dispatch(request, *args, **kwargs)
 
@@ -111,14 +121,15 @@ class PrivacySettingsView(generic.UpdateView):
     pk_url_kwarg = 'user_id'
     form_class = PrivacySettingsForm
 
+    @method_decorator(csrf_protect)
     def dispatch(self, request, *args, **kwargs):
-        if request.user.id != self.kwargs[PrivacySettingsView.pk_url_kwarg]:
-            self.kwargs[PrivacySettingsView.pk_url_kwarg] = request.user.id
+        if request.user.id != self.kwargs[self.pk_url_kwarg]:
+            self.kwargs[self.pk_url_kwarg] = request.user.id
             return HttpResponseRedirect(reverse_lazy('users:privacy_settings', kwargs=self.kwargs))
         return super(PrivacySettingsView, self).dispatch(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
-        return PrivacySettings.objects.get(pk=self.kwargs[PrivacySettingsView.pk_url_kwarg])
+        return PrivacySettings.objects.get(pk=self.kwargs[self.pk_url_kwarg])
 
     def get_success_url(self):
         messages.success(self.request, 'Privacy settings updated.', extra_tags='alert-success')
@@ -131,9 +142,10 @@ class CustomUserDeleteView(generic.DeleteView):
     pk_url_kwarg = 'user_id'
     model = CustomUser
 
+    @method_decorator(csrf_protect)
     def dispatch(self, request, *args, **kwargs):
-        if request.user.id != self.kwargs[CustomUserDeleteView.pk_url_kwarg]:
-            self.kwargs[CustomUserDeleteView.pk_url_kwarg] = request.user.id
+        if request.user.id != self.kwargs[self.pk_url_kwarg]:
+            self.kwargs[self.pk_url_kwarg] = request.user.id
             return HttpResponseRedirect(reverse_lazy('users:delete', kwargs=self.kwargs))
         return super(CustomUserDeleteView, self).dispatch(request, *args, **kwargs)
 
