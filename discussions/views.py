@@ -43,7 +43,10 @@ class CreateDiscussionView(generic.CreateView):
         form.creator=self.request.user
         return super(CreateDiscussionView, self).form_valid(form)
 
-
+    # def get_form_kwargs(self):
+    #     kwargs = super().get_form_kwargs()
+    #     kwargs['creator'] = self.request.user
+    #     return kwargs
 
 class CreateDoneView(generic.TemplateView):
     template_name = 'discussions/discussion_done.html'
@@ -93,9 +96,16 @@ def leave(request,discussion_id,user_id):
         user=CustomUser.objects.get(pk=user_id)
         discussion.users.remove(user)
         Discussion.objects.filter(users__isnull=True).delete()
-        discussion = Discussion.objects.filter(users=user_id)
+
+        if(discussion.creator==user):
+            discussion.delete()
+        Discussion.objects.filter(users__isnull=True).delete()
+
+        user_discussions=Discussion.objects.filter(users=user_id)
+        creator_discussions=Discussion.objects.filter(creator=user_id)
+        all_discussions = user_discussions|creator_discussions
         context['user_id'] = user_id
-        context['discussions'] = discussion
+        context['discussions'] = all_discussions
     except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist, ValidationError):
         discussion = None
     return HttpResponse(render(request, 'discussions/discussion_home.html', context))
