@@ -1,61 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>friendship profile</title>
-</head>
-<body>
-    <h1>this is friendship profile test</h1>
-    <table  border="8">
-        <thead>
-            <tr>
-                <th>id</th>
-                <th>username</th>
-                <th>first_name</th>
-                <th>last_name</th>
-                <th>email</th>
-                <th>phone</th>
-                <th>address</th>
-                <th>date_joined</th>
+{% extends 'base.html' %}
 
-            </tr>
+{% block title %}
+    Friendship Profile
+{% endblock %}
+
+{% block content %}
+    <h1>this is friendship profile test</h1>
+    <table border="8">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>username</th>
+            <th>first_name</th>
+            <th>last_name</th>
+            <th>email</th>
+            <th>phone</th>
+            <th>address</th>
+            <th>date_joined</th>
+
+        </tr>
         </thead>
         <tbody>
-            {% for user in user_detail %}
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.first_name }}</td>
-                    <td>{{ user.last_name }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.phone }}</td>
-                    <td>{{ user.address }}</td>
-                    <td>{{ user.date_joined }}</td>
-                    {% if user.id !=  user_id%}
-                        <form method="post" id="requestform" action="/friendships/{{ user_id }}/{{ user.id }}/profile/">
-                            {% csrf_token %}
-                            <p><input id="time" type="hidden" name="timestamp"/></p>
-                            <p><input type="hidden" name="recipient_id" value="{{ user.id }}"/></p>
-                            <p><input type="hidden" name="sender_id" value="{{ user_id }}"/></p>
+        {% for user in user_detail %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.first_name }}</td>
+                <td>{{ user.last_name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.phone }}</td>
+                <td>{{ user.address }}</td>
+                <td>{{ user.date_joined }}</td>
+                {% if user.id !=  user_id %}
+                    <form method="post" id="requestform" action="/friendships/{{ user_id }}/{{ user.id }}/profile/">
+                        {% csrf_token %}
+                        <p><input id="time" type="hidden" name="timestamp"/></p>
+                        <p><input type="hidden" name="recipient_id" value="{{ user.id }}"/></p>
+                        <p><input type="hidden" name="sender_id" value="{{ user_id }}"/></p>
 
-                            <input type="button" onclick='botton_click()' value='add friend'>
-                            <script>
-                                function add0(m){return m<10?'0'+m:m }
-                                function botton_click(){
-                                    var time = new Date();
-                                    var new_date =  time.getFullYear()+'-'+add0(time.getMonth()+1)+'-'+add0(time.getDate())+' '+add0(time.getHours())+':'+add0(time.getMinutes())+':'+add0(time.getSeconds());
+                        <input type="button" onclick='botton_click()' value='add friend'>
+                        <script>
+                            function add0(m) {
+                                return m < 10 ? '0' + m : m
+                            }
 
-                                    document.getElementById("time").value = new_date;
-                                    document.getElementById("requestform").submit()
-                                }
-                            </script>
-                        </form>
-                    {% else %}
-                        <p>this is your own profile page</p>
-                    {% endif %}
-                </tr>
-            {% endfor %}
+                            function botton_click() {
+                                var time = new Date();
+                                var new_date = time.getFullYear() + '-' + add0(time.getMonth() + 1) + '-' + add0(time.getDate()) + ' ' + add0(time.getHours()) + ':' + add0(time.getMinutes()) + ':' + add0(time.getSeconds());
+
+                                document.getElementById("time").value = new_date;
+                                document.getElementById("requestform").submit()
+                            }
+                        </script>
+                    </form>
+                {% else %}
+                    <p>this is your own profile page</p>
+                {% endif %}
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+
+{% endblock %}

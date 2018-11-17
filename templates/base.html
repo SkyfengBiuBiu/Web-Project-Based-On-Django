@@ -49,13 +49,10 @@
                     <a class="nav-link" href="{% url 'profiles:my_home' %}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Groups</a>
+                    <a class="nav-link" href="{% url 'friendships:friendship_home' user.id %}">Find Friends</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Find Friends</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{% url 'friendships:friendship_request' user.id %}">
                         Friend Requests <span class="badge badge-secondary">4</span>
                     </a>
                 </li>

@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import generic
 
+from friendships.models import Friendship
 from profiles.forms import PostForm
 from profiles.models import Post
 from users.models import CustomUser
@@ -24,7 +25,7 @@ class ProfilesHomeView:
         # Posts List
         context['post_list'] = self.get_posts(owner, 1)
         # Friends List
-        context['friend_list'] = self.get_friends(owner)
+        context['friend_list'] = self.get_friends(owner, 1)
         # Discussions List
         context['discussion_list'] = self.get_discussions(owner)
         # Events List
@@ -36,8 +37,12 @@ class ProfilesHomeView:
         paginator = Paginator(post_list, post_page_size)
         return paginator.get_page(page_no)
 
-    def get_friends(self, user):
-        pass
+    def get_friends(self, user, page_no):
+        friends_id = Friendship.objects.filter(user1=user).values('user2').union(
+            Friendship.objects.filter(user2=user).values('user1'))
+        friend_list = CustomUser.objects.filter(pk__in=friends_id).order_by('username')
+        paginator = Paginator(friend_list, friend_page_size)
+        return paginator.get_page(page_no)
 
     def get_discussions(self, user):
         pass

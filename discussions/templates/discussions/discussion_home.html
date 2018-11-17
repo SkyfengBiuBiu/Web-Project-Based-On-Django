@@ -1,67 +1,71 @@
-
 {% extends 'base.html' %}
+
 {% load static %}
+
 {% block title %}Discussion index{% endblock %}
+
 {% block content %}
-<h2>Discussion</h2>
-{% for discussion in discussions.all.distinct %}
-    <h4 class="list-group-item-heading">{{discussion.id}}:{{discussion.topic}}</h4>
-    <p class="list-group-item-text">
-     {% for user in discussion.users.all.distinct %}
-        First name:<p>{{user.last_name}}</p>
-        Last name :<p>{{user.first_name}}</p>
+    <h2>Discussion</h2>
+    {% for discussion in discussions.all.distinct %}
+        <h4 class="list-group-item-heading">{{ discussion.id }}:{{ discussion.topic }}</h4>
+        <p class="list-group-item-text">
+            {% for user in discussion.users.all.distinct %}
+                First name:<p>{{ user.last_name }}</p>
+                Last name :<p>{{ user.first_name }}</p>
+            {% endfor %}
+
+        <a href="{% url 'discussions:discussion_detail' discussion.id %}">Enroll</a>
+        <br>
+        <form class="form-inline ml-auto">
+            <a class="btn btn-outline-primary mx-sm-1"
+               href="{% url 'discussions:discussion_confirm_leave' discussion.id user_id %}">Leave</a>
+        </form>
     {% endfor %}
+    {#<!--#}
+    {#{% for discussion in discussions.all.distinct %}#}
+    {#    <div class="card post-card">#}
+    {#        <div class="card-header">#}
+    {#            <div class="d-flex justify-content-between align-items-center">#}
+    {#                <div class="d-flex justify-content-between align-items-center">#}
+    {##}
+    {#                    <div class="ml-2">#}
+    {#                        <div class="h5 m-0">{{discussion.topic}}</div>#}
+    {#                        <div class="h6 text-muted">{{discussion.id}}</div>#}
+    {#                    </div>#}
+    {#                </div>#}
+    {#                <div>#}
+    {#                    {% if post.privacy_level == 'pb' %}#}
+    {#                        <i class="fa fa-globe"></i> Public#}
+    {#                    {% elif post.privacy_level == 'fr' %}#}
+    {#                        <i class="fa fa-users"></i> Friends#}
+    {#                    {% elif post.privacy_level == 'jm' %}#}
+    {#                        <i class="fa fa-user"></i> Just me#}
+    {#                    {% endif %}#}
+    {##}
+    {#                <p class="list-group-item-text">#}
+    {#                        {% for user in discussion.users.all.distinct %}#}
+    {#                            <p><a href="#" class="card-link">The number of the user: {{ user.id }}</a></p>#}
+    {#                           <p> First name:{{user.last_name}}</p>#}
+    {#                            <p>Last name :{{user.first_name}}</p>#}
+    {#                        {% endfor %}#}
+    {##}
+    {#                </div>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#        <a href="{% url 'discussions:discussion_detail' discussion.id %}">Enroll</a>#}
+    {#    <br>#}
+    {#    <form class="form-inline ml-auto">#}
+    {#    <a class="btn btn-outline-primary mx-sm-1" href="{% url 'discussions:discussion_confirm_leave' discussion.id user_id%}">Leave</a>#}
+    {#    </form>#}
+    {#    </div>#}
+    {#    {% endfor %}#}
+    {#-->#}
 
-    <a href="{% url 'discussions:discussion_detail' discussion.id %}">Enroll</a>
-    <br>
     <form class="form-inline ml-auto">
-    <a class="btn btn-outline-primary mx-sm-1" href="{% url 'discussions:discussion_confirm_leave' discussion.id user_id%}">Leave</a>
+        <a class="btn btn-outline-primary mx-sm-1" href="{% url 'discussions:discussion_create' %}">Create your
+            discussion</a>
     </form>
-{% endfor %}
-{#<!--#}
-{#{% for discussion in discussions.all.distinct %}#}
-{#    <div class="card post-card">#}
-{#        <div class="card-header">#}
-{#            <div class="d-flex justify-content-between align-items-center">#}
-{#                <div class="d-flex justify-content-between align-items-center">#}
-{##}
-{#                    <div class="ml-2">#}
-{#                        <div class="h5 m-0">{{discussion.topic}}</div>#}
-{#                        <div class="h6 text-muted">{{discussion.id}}</div>#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div>#}
-{#                    {% if post.privacy_level == 'pb' %}#}
-{#                        <i class="fa fa-globe"></i> Public#}
-{#                    {% elif post.privacy_level == 'fr' %}#}
-{#                        <i class="fa fa-users"></i> Friends#}
-{#                    {% elif post.privacy_level == 'jm' %}#}
-{#                        <i class="fa fa-user"></i> Just me#}
-{#                    {% endif %}#}
-{##}
-{#                <p class="list-group-item-text">#}
-{#                        {% for user in discussion.users.all.distinct %}#}
-{#                            <p><a href="#" class="card-link">The number of the user: {{ user.id }}</a></p>#}
-{#                           <p> First name:{{user.last_name}}</p>#}
-{#                            <p>Last name :{{user.first_name}}</p>#}
-{#                        {% endfor %}#}
-{##}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#        <a href="{% url 'discussions:discussion_detail' discussion.id %}">Enroll</a>#}
-{#    <br>#}
-{#    <form class="form-inline ml-auto">#}
-{#    <a class="btn btn-outline-primary mx-sm-1" href="{% url 'discussions:discussion_confirm_leave' discussion.id user_id%}">Leave</a>#}
-{#    </form>#}
-{#    </div>#}
-{#    {% endfor %}#}
-{#-->#}
-
-<form class="form-inline ml-auto">
-<a class="btn btn-outline-primary mx-sm-1" href="{% url 'discussions:discussion_create' %}">Create your discussion</a>
-</form>
 
 
-</div>
+    </div>
 {% endblock %}

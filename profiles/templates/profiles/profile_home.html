@@ -19,7 +19,9 @@
         <!-- Discussions List start -->
         <div class="card post-card">
             <div class="card-header">
-                <h5 class="card-title">Discussions List</h5>
+                <strong class="card-title">Discussions List</strong>
+                <a href="{% url 'discussions:discussion_home' owner.id %}" class="card-link"><span
+                        class="badge badge-primary badge-pill">more</span></a>
             </div>
             <ul class="list-group list-group-flush">
                 {% for discussion in discussion_list %}
@@ -27,55 +29,50 @@
                     </li>
                 {% endfor %}
             </ul>
-            <div class="card-footer">
-                <a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a>
-                <a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a>
-                <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
-            </div>
         </div>
         <!-- Discussions List end -->
 
         <!-- Friends List start -->
         <div class="card post-card">
             <div class="card-header">
-                <h5 class="card-title">Friends List</h5>
+                <strong class="card-title">Friends List</strong>
+                <a href="{% url 'friendships:friendship_home' owner.id %}" class="card-link"><span
+                        class="badge badge-primary badge-pill">more</span></a>
             </div>
             <ul class="list-group list-group-flush">
                 {% for friend in friend_list %}
                     <li class="list-group-item">
                         <a href="{% url 'profiles:visit_home' friend.id %}">
-                            <img class="rounded-circle" width="20" src="https://picsum.photos/50/50"
+                            <img class="rounded-circle" width="20"
+                                    {% if friend.customuserprofile.photo.url is not None %}
+                                 src="{{ friend.customuserprofile.photo.url }}"
+                                    {% else %} src="{% static 'default_photo.jpg' %}" {% endif %}
                                  alt="{{ friend.username }}'s Profile Photo">
                             <span>{{ friend.username }}</span>
                         </a>
                     </li>
                 {% endfor %}
             </ul>
-            <div class="card-footer">
-                <a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a>
-                <a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a>
-                <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
-            </div>
         </div>
         <!-- Friends List end -->
 
         <!-- Events List start -->
-        <div class="card post-card">
-            <div class="card-header">
-                <h5 class="card-title">Events List</h5>
-            </div>
-            <ul class="list-group list-group-flush">
-                {% for event in event_list %}
-                    <li class="list-group-item">
-                    </li>
-                {% endfor %}
-            </ul>
-            <div class="card-footer">
-                <a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a>
-                <a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a>
-                <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
-            </div>
-        </div>
+        {#        <div class="card post-card">#}
+        {#            <div class="card-header">#}
+        {#                <h5 class="card-title">Events List</h5>#}
+        {#            </div>#}
+        {#            <ul class="list-group list-group-flush">#}
+        {#                {% for event in event_list %}#}
+        {#                    <li class="list-group-item">#}
+        {#                    </li>#}
+        {#                {% endfor %}#}
+        {#            </ul>#}
+        {#            <div class="card-footer">#}
+        {#                <a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a>#}
+        {#                <a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a>#}
+        {#                <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>#}
+        {#            </div>#}
+        {#        </div>#}
         <!-- Events List end -->
     </div>
 
