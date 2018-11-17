@@ -24,8 +24,7 @@
                         <li class="list-group-item">Address: {{ user.address }}</li>
                     </ul>
                     <div class="card-body">
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
+                        <a href="{% url 'profiles:my_home' %}" class="card-link">My Home Page</a>
                     </div>
                     <div class="card-footer text-muted">
                         Last login: {{ user.last_login }}

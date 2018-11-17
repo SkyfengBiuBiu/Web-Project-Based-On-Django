@@ -26,9 +26,15 @@
                         {% endif %}
                     </div>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Email: {{ owner.email }}</li>
-                        <li class="list-group-item">Phone: {{ owner.phone }}</li>
-                        <li class="list-group-item">Address: {{ owner.address }}</li>
+                        {% if user.id == owner.id or privacy_settings.email_p %}
+                            <li class="list-group-item">Email: {{ owner.email }}</li>
+                        {% endif %}
+                        {% if user.id == owner.id or privacy_settings.phone_p %}
+                            <li class="list-group-item">Phone: {{ owner.phone }}</li>
+                        {% endif %}
+                        {% if user.id == owner.id or privacy_settings.address_p %}
+                            <li class="list-group-item">Address: {{ owner.address }}</li>
+                        {% endif %}
                     </ul>
                     <div class="card-footer text-muted">
                         Last login: {{ owner.last_login }}

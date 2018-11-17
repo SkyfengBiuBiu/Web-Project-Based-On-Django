@@ -34,7 +34,7 @@
                                 {% if field.errors %}
                                     {{ field }}
                                     {% for error in field.errors %}
-                                        <div class="invalid-feedback">
+                                        <div class="invalid-feedback" style="display: block;">
                                             {{ error }}
                                         </div>
                                     {% endfor %}

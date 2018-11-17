@@ -7,8 +7,8 @@
     <div class="col-md-6 change-gutters">
         <!-- Post Form start -->
         <div id="id_post_create_div"></div>
-
         <!-- Post Form end -->
+
         <div id="id_post_list">
             {% include 'profiles/post/post_list.html' %}
         </div>
@@ -32,29 +32,31 @@
         </div>
         <!-- Discussions List end -->
 
-        <!-- Friends List start -->
-        <div class="card post-card">
-            <div class="card-header">
-                <strong class="card-title">Friends List</strong>
-                <a href="{% url 'friendships:friendship_home' owner.id %}" class="card-link"><span
-                        class="badge badge-primary badge-pill">more</span></a>
+        {% if user.id == owner.id or privacy_settings.friend_list_p %}
+            <!-- Friends List start -->
+            <div class="card post-card">
+                <div class="card-header">
+                    <strong class="card-title">Friends List</strong>
+                    <a href="{% url 'friendships:friendship_home' owner.id %}" class="card-link"><span
+                            class="badge badge-primary badge-pill">more</span></a>
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for friend in friend_list %}
+                        <li class="list-group-item">
+                            <a href="{% url 'profiles:visit_home' friend.id %}">
+                                <img class="rounded-circle" width="20"
+                                        {% if friend.customuserprofile.photo.url is not None %}
+                                     src="{{ friend.customuserprofile.photo.url }}"
+                                        {% else %} src="{% static 'default_photo.jpg' %}" {% endif %}
+                                     alt="{{ friend.username }}'s Profile Photo">
+                                <span>{{ friend.username }}</span>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
             </div>
-            <ul class="list-group list-group-flush">
-                {% for friend in friend_list %}
-                    <li class="list-group-item">
-                        <a href="{% url 'profiles:visit_home' friend.id %}">
-                            <img class="rounded-circle" width="20"
-                                    {% if friend.customuserprofile.photo.url is not None %}
-                                 src="{{ friend.customuserprofile.photo.url }}"
-                                    {% else %} src="{% static 'default_photo.jpg' %}" {% endif %}
-                                 alt="{{ friend.username }}'s Profile Photo">
-                            <span>{{ friend.username }}</span>
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-        <!-- Friends List end -->
+            <!-- Friends List end -->
+        {% endif %}
 
         <!-- Events List start -->
         {#        <div class="card post-card">#}
@@ -98,36 +100,15 @@
 {% block js-extra-script %}
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#id_post_create_div").load(
-                "{% url 'profiles:post_create' %}",
-                refreshForms
-            );
+            {% if user.id == owner.id %}
+                $("#id_post_create_div").load(
+                    "{% url 'profiles:post_create' %}",
+                    refreshForms
+                );
+            {% endif %}
+
             refreshPosts();
         });
-
-        function refreshForms() {
-            $("form").on("submit", function (event) {
-                event.preventDefault();
-                $.ajax({
-                    data: $(this).serialize(),
-                    type: $(this).attr('method'),
-                    url: $(this).attr('action'),
-                    success: function (response) {
-                        console.log(response)
-                        $("#id_post_create_div").load("{% url 'profiles:post_create' %}", refreshForms); // reset form
-                        $("#id_post_list").load("{% url 'profiles:post_list' owner.id 1 %}", refreshPosts); // refresh posts list
-                        $("#id_ajax_notification_body").html(response.message);
-                        // message notification
-                        $("#id_ajax_notification").modal('toggle');
-                    },
-                    error: function (data) {
-                        $("#id_ajax_notification_body").html('Please wait for a moment...');
-                        // message notification
-                        $("#id_ajax_notification").modal('toggle');
-                    }
-                });
-            });
-        }
 
         function refreshPosts() {
             $(".pagination a.page-link").on('click', function (event) {
@@ -135,5 +116,31 @@
                 $("#id_post_list").load($(this).attr('href'), refreshPosts); // refresh posts list
             });
         }
+
+        {% if user.id == owner.id %}
+            function refreshForms() {
+                $("form").on("submit", function (event) {
+                    event.preventDefault();
+                    $.ajax({
+                        data: $(this).serialize(),
+                        type: $(this).attr('method'),
+                        url: $(this).attr('action'),
+                        success: function (response) {
+                            console.log(response)
+                            $("#id_post_create_div").load("{% url 'profiles:post_create' %}", refreshForms); // reset form
+                            $("#id_post_list").load("{% url 'profiles:post_list' owner.id 1 %}", refreshPosts); // refresh posts list
+                            $("#id_ajax_notification_body").html(response.message);
+                            // message notification
+                            $("#id_ajax_notification").modal('toggle');
+                        },
+                        error: function (data) {
+                            $("#id_ajax_notification_body").html('Please wait for a moment...');
+                            // message notification
+                            $("#id_ajax_notification").modal('toggle');
+                        }
+                    });
+                });
+            }
+        {% endif %}
     </script>
 {% endblock %}

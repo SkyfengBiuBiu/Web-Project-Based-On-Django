@@ -18,7 +18,7 @@ from django.utils.decorators import method_decorator
 def home(request,user_id):
     context = {}
     try:
-        uid = request.user.id
+        uid = user_id
         user_discussions=Discussion.objects.filter(users=uid)
         creator_discussions=Discussion.objects.filter(creator=uid)
         all_discussions = user_discussions|creator_discussions
@@ -44,33 +44,66 @@ class CreateDiscussionView(generic.CreateView):
         return super(CreateDiscussionView, self).form_valid(form)
 
 
-def datail(request,discussion_id):
-    try:
-        discussion = Discussion.objects.get(pk=discussion_id)
-        chats = discussion.chatMessage.all()
-    except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist, ValidationError):
-        discussion = None
-    render(request, 'discussions/discussion_detail.html', {'chats': chats})
 
-    if request.method == 'POST':
-        post_type = request.POST.get('post_type')
-        if post_type == 'send_chat':
-            new_chat = ChatMessage.objects.create(
-                content = request.POST.get('content'),
-                user = request.user,
-                headline=timezone.localtime(timezone.now()).strftime("%Y-%m-%d %H:%M:%S"),
-            )
-            new_chat.save()
-            return HttpResponse()
+class CreateDoneView(generic.TemplateView):
+    template_name = 'discussions/discussion_done.html'
 
-        elif post_type == 'get_chat':
-            last_chat_id = int(request.POST.get('last_chat_id'))
-            chats = discussion.chatMessage
-            chats = chats.objects.filter(id__gt = last_chat_id)
-            return render(request, 'discussions/discussion_detail.html', {'chats': chats})
+
+
+def detail(request,discussion_id):
+
+    if request.method == "GET":
+
+        chat_list = ChatMessage.objects.filter(discussion=discussion_id).order_by('-id')[:10]
+        chat_list = reversed(list(chat_list))
+
+        return render(request, 'discussions/discussion_detail.html', {'chat_list':chat_list,\
+                                                                      'discussion_id':discussion_id})
+
     else:
-        raise Http404
 
+        if request.POST.get('SendOrDelete') == 'send':
+
+            timestamp = request.POST.get('timestamp')
+            message_content = request.POST.get('MessageContent')
+
+            discussion = Discussion.objects.get(pk=discussion_id)
+            chatmessage = ChatMessage.objects.create(user_id=request.user.id, \
+                                                     headline=timestamp, \
+                                                     content=message_content)
+
+            discussion.chatMessage.add(chatmessage)
+
+        elif request.POST.get('SendOrDelete') == 'delete':
+
+            discussion = Discussion.objects.get(pk=discussion_id)
+            creator_id = discussion.creator
+
+            id = request.POST.get('id')
+            user_id = request.POST.get('user_id')
+
+
+            if request.user.id != creator_id:
+
+                if int(user_id) == request.user.id:
+
+                    ChatMessage.objects.filter(discussion=discussion_id, user_id=user_id, id=id).delete()
+
+            elif request.user.id == creator_id:
+
+                    ChatMessage.objects.filter(discussion=discussion_id, user_id=user_id, id=id).delete()
+
+        return HttpResponseRedirect('/discussions/%s/detail' % discussion_id)
+
+
+@method_decorator(login_required, name='dispatch')
+class CustomUserLeaveView(generic.DeleteView):
+    template_name = 'users/user_confirm_delete.html'
+    pk_url_kwarg = 'user_id'
+    model = CustomUser
+
+    def get_success_url(self):
+        return reverse_lazy('users:delete_done')
 
 
 def leave(request,discussion_id,user_id):
@@ -80,16 +113,9 @@ def leave(request,discussion_id,user_id):
         user=CustomUser.objects.get(pk=user_id)
         discussion.users.remove(user)
         Discussion.objects.filter(users__isnull=True).delete()
-
-        if(discussion.creator==user):
-            discussion.delete()
-        Discussion.objects.filter(users__isnull=True).delete()
-
-        user_discussions=Discussion.objects.filter(users=user_id)
-        creator_discussions=Discussion.objects.filter(creator=user_id)
-        all_discussions = user_discussions|creator_discussions
+        discussion = Discussion.objects.filter(users=user_id)
         context['user_id'] = user_id
-        context['discussions'] = all_discussions
+        context['discussions'] = discussion
     except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist, ValidationError):
         discussion = None
     return HttpResponse(render(request, 'discussions/discussion_home.html', context))

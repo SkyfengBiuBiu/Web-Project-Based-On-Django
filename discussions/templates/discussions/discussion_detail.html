@@ -1,58 +1,54 @@
-{% extends "base.html" %}
-
-{% block title %}Chat room{% endblock %}
-
-{% block content %}
-    <div class="list-group col-md-10 col-md-offset-1 well">
-        <div class="list-group-item">
-            {% for chat in chats %}
-                <h4 class="list-group-item-heading">{{ chat.user }}:{{ chat.content }}</h4>
-                <p class="list-group-item-text">{{ chat.headline }}</p>
-                <input type="hidden" class="chat_id" value="{{ chat.id }}"/>
-                <br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>discussion detail</title>
+</head>
+<body>
+    <h1>this is discussion detail test</h1>
+    <table  border="8">
+        <thead>
+            <tr>
+                <th>send time</th>
+                <th>user id</th>
+                <th>content</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for chat in chat_list %}
+                <tr>
+                    <td>{{ chat.headline }}</td>
+                    <td>{{ chat.user_id }}</td>
+                    <td>{{ chat.content }}</td>
+                    <td>
+                        <form method="post" id="DeleteMessageForm" action="/discussions/{{ discussion_id }}/detail">
+                            {% csrf_token %}
+                            <p><input type="hidden" name="id" value={{ chat.id }}></p>
+                            <p><input type="hidden" name="user_id" value={{ chat.user_id }}></p>
+                            <p><input type="hidden" name="SendOrDelete" value="delete"></p>
+                            <input type="submit" value='delete'>
+                        </form>
+                    </td>
+                </tr>
             {% endfor %}
-        </div>
-    </div>
+        </tbody>
+    </table>
+    <form method="post" id="ChatMessageForm" action="/discussions/{{ discussion_id }}/detail">
+        {% csrf_token %}
+        <p><input id="time" type="hidden" name="timestamp"/></p>
+        <p><input type="text" name="MessageContent"/></p>
+        <p><input type="hidden" name="SendOrDelete" value="send"/></p>
+        <input type="button" onclick='botton_click()' value='send'>
+        <script>
+            function add0(m){return m<10?'0'+m:m }
+            function botton_click(){
+                var time = new Date();
+                var new_date =  time.getFullYear()+'-'+add0(time.getMonth()+1)+'-'+add0(time.getDate())+' '+add0(time.getHours())+':'+add0(time.getMinutes())+':'+add0(time.getSeconds());
 
-    <form id="chatForm" class="form-horizontal panel container" method="POST" action=".">{% csrf_token %}
-        <div class="form-group col-md-10">
-            <textarea type="text" name="content" id="content" value="" class="form-control" id="exampleMessage"
-                      placeholder=""></textarea>
-        </div>
-        <div class="form-group col-md-4">
-            <input type="hidden" name="post_type" value="send_chat"/>
-            <input type="submit" class="btn btn-lg btn-primary" value="send"/>
-        </div>
+                document.getElementById("time").value = new_date;
+                document.getElementById("ChatMessageForm").submit()
+            }
+        </script>
     </form>
-{% endblock %}
-{% block script %}
-    <script>
-        $(document).ready(function () {
-            updateMsg();
-            $("#chatForm").submit(function () {
-
-                $.post("./post/",
-                    $('#chatForm').serialize(),
-                    function (data) {
-                        $("#content").val("");
-
-                    });
-                return false;
-            });
-        });
-
-
-        function updateMsg() {
-            $.post(
-                "./post/",
-                {
-                    post_type: "get_chat",
-                    last_chat_id: $(".chat_id").last().val()
-                },
-                function (data) {
-                    $('.list-group-item').append(data);
-                });
-            setTimeout("updateMsg()", 5000);
-        }
-    </script>
-{% endblock %}
+</body>
+</html>
