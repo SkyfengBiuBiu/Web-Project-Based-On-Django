@@ -48,32 +48,91 @@ class CreateDiscussionView(generic.CreateView):
 class CreateDoneView(generic.TemplateView):
     template_name = 'discussions/discussion_done.html'
 
-def datail(request,discussion_id):
-    try:
-        discussion = Discussion.objects.get(pk=discussion_id)
-        chats = discussion.chatMessage.all()
-    except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist, ValidationError):
-        discussion = None
-    render(request, 'discussions/discussion_detail.html', {'chats': chats})
 
-    if request.method == 'POST':
-        post_type = request.POST.get('post_type')
-        if post_type == 'send_chat':
-            new_chat = ChatMessage.objects.create(
-                content = request.POST.get('content'),
-                user = request.user,
-                headline=timezone.localtime(timezone.now()).strftime("%Y-%m-%d %H:%M:%S"),
-            )
-            new_chat.save()
-            return HttpResponse()
 
-        elif post_type == 'get_chat':
-            last_chat_id = int(request.POST.get('last_chat_id'))
-            chats = discussion.chatMessage
-            chats = chats.objects.filter(id__gt = last_chat_id)
-            return render(request, 'discussions/discussion_detail.html', {'chats': chats})
+def detail(request,discussion_id):
+
+    if request.method == "GET":
+
+        chat_list = ChatMessage.objects.filter(discussion=discussion_id).order_by('-id')[:10]
+        chat_list = reversed(list(chat_list))
+
+        return render(request, 'discussions/discussion_detail.html', {'chat_list':chat_list,\
+                                                                      'discussion_id':discussion_id})
+
     else:
-        raise Http404
+
+        if request.POST.get('SendOrDelete') == 'send':
+
+            timestamp = request.POST.get('timestamp')
+            message_content = request.POST.get('MessageContent')
+
+            discussion = Discussion.objects.get(pk=discussion_id)
+            chatmessage = ChatMessage.objects.create(user_id=request.user.id, \
+                                                     headline=timestamp, \
+                                                     content=message_content)
+
+            discussion.chatMessage.add(chatmessage)
+
+        elif request.POST.get('SendOrDelete') == 'delete':
+
+            discussion = Discussion.objects.get(pk=discussion_id)
+            creator_id = discussion.creator
+
+            id = request.POST.get('id')
+            user_id = request.POST.get('user_id')
+
+
+            if request.user.id != creator_id:
+
+                if int(user_id) == request.user.id:
+
+                    ChatMessage.objects.filter(discussion=discussion_id, user_id=user_id, id=id).delete()
+
+            elif request.user.id == creator_id:
+
+                    ChatMessage.objects.filter(discussion=discussion_id, user_id=user_id, id=id).delete()
+
+        return HttpResponseRedirect('/discussions/%s/detail' % discussion_id)
+
+
+
+
+
+
+
+
+
+
+
+    # try:
+    #     discussion = Discussion.objects.get(pk=discussion_id)
+    #     chats = discussion.chatMessage.all()
+    # except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist, ValidationError):
+    #     discussion = None
+    # render(request, 'discussions/discussion_detail.html', {'chats': chats})
+    #
+    # if request.method == 'POST':
+    #     post_type = request.POST.get('post_type')
+    #     if post_type == 'send_chat':
+    #         new_chat = ChatMessage.objects.create(
+    #             content = request.POST.get('content'),
+    #             user = request.user,
+    #             headline=timezone.localtime(timezone.now()).strftime("%Y-%m-%d %H:%M:%S"),
+    #         )
+    #         new_chat.save()
+    #         return HttpResponse()
+    #
+    #     elif post_type == 'get_chat':
+    #         last_chat_id = int(request.POST.get('last_chat_id'))
+    #         chats = discussion.chatMessage
+    #         chats = chats.objects.filter(id__gt = last_chat_id)
+    #         return render(request, 'discussions/discussion_detail.html', {'chats': chats})
+    # else:
+    #     raise Http404
+
+
+
 
 
 @method_decorator(login_required, name='dispatch')
