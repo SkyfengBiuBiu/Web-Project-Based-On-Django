@@ -4,7 +4,6 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 
-
 # Create your models here.
 class CustomUser(AbstractUser):
     first_name = models.CharField(_('first name'), max_length=30, blank=False)
@@ -12,15 +11,6 @@ class CustomUser(AbstractUser):
     email = models.EmailField(_('email address'), blank=False)
     phone = models.CharField(_('phone number'), max_length=20, blank=False)
     address = models.CharField(_('address'), max_length=254, blank=False)
-
-    is_active = models.BooleanField(
-        _('active'),
-        default=False,
-        help_text=_(
-            'Designates whether this user should be treated as active. '
-            'Unselect this instead of deleting accounts.'
-        ),
-    )
 
     class Meta(AbstractUser.Meta):
         ordering = ['-date_joined']
@@ -46,7 +36,7 @@ class CustomUserProfile(models.Model):
 
 
 class PrivacySettings(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
 
     PUBLIC = 'pb'
     FRIENDS = 'fr'
@@ -65,4 +55,4 @@ class PrivacySettings(models.Model):
     friend_list_p = models.CharField(_('friends privacy'), max_length=2, choices=SETTING_CHOICES, default=PUBLIC)
 
     def __str__(self):
-        return 'Privacy Settings for {}'.format(self.owner.username)
+        return 'Privacy Settings for {}'.format(self.user.username)

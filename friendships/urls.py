@@ -5,6 +5,7 @@ from . import views
 app_name = 'friendships'
 
 urlpatterns = [
-    path('<int:user_id>/home', views.home, name='friendship_home'),
-    path('<int:user_id>/request', views.request, name='friendship_request')
+    path('<int:user_id>/home/', views.home, name='friendship_home'),
+    path('<int:user_id>/request/', views.request, name='friendship_request'),
+    path('<int:user_id>/<int:recipient_id>/profile/', views.profile)
 ]

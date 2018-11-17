@@ -78,6 +78,24 @@
         </div>
         <!-- Events List end -->
     </div>
+
+    <!-- Message Notifications -->
+    <div id="id_ajax_notification" class="modal fade bottom" id="frameModalBottom" tabindex="-1" role="dialog"
+         aria-labelledby="ajax_notification"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div class="row d-flex justify-content-center align-items-center">
+                        <p id="id_ajax_notification_body" class="pt-3 pr-2"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block js-extra-script %}
@@ -98,11 +116,17 @@
                     type: $(this).attr('method'),
                     url: $(this).attr('action'),
                     success: function (response) {
+                        console.log(response)
                         $("#id_post_create_div").load("{% url 'profiles:post_create' %}", refreshForms); // reset form
-                        $("#id_post_list").load("{% url 'profiles:post_list' user.id 1 %}", refreshPosts); // refresh posts list
+                        $("#id_post_list").load("{% url 'profiles:post_list' owner.id 1 %}", refreshPosts); // refresh posts list
+                        $("#id_ajax_notification_body").html(response.message);
+                        // message notification
+                        $("#id_ajax_notification").modal('toggle');
                     },
                     error: function (data) {
-                        alert('something wrong.')
+                        $("#id_ajax_notification_body").html('Please wait for a moment...');
+                        // message notification
+                        $("#id_ajax_notification").modal('toggle');
                     }
                 });
             });

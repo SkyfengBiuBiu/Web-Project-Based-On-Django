@@ -2,9 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>friendship home</title>
 </head>
 <body>
-{{ content }}
+    <h1>this is friendship home test</h1>
+    <table  border="8">
+        <thead>
+            <tr>
+                <td colspan="2" align="middle">total user list</td>
+            </tr>
+            <tr>
+                <th>id</th>
+                <th>username</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user_total in user_total_list %}
+                <tr>
+                    <td>{{ user_total.id }}</td>
+                    <td><a href="/friendships/{{ user_id }}/{{ user_total.id }}/profile">{{ user_total.username }}</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>

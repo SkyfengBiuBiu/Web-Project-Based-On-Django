@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.http import urlsafe_base64_decode
@@ -70,6 +71,12 @@ class UserProfileView(generic.UpdateView):
     pk_url_kwarg = 'user_id'
     form_class = CustomUserChangeForm
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.id != self.kwargs[UserProfileView.pk_url_kwarg]:
+            self.kwargs[UserProfileView.pk_url_kwarg] = request.user.id
+            return HttpResponseRedirect(reverse_lazy('users:profile', kwargs=self.kwargs))
+        return super(UserProfileView, self).dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         context = self.get_context_data()
         profile = context['profile']
@@ -104,6 +111,12 @@ class PrivacySettingsView(generic.UpdateView):
     pk_url_kwarg = 'user_id'
     form_class = PrivacySettingsForm
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.id != self.kwargs[PrivacySettingsView.pk_url_kwarg]:
+            self.kwargs[PrivacySettingsView.pk_url_kwarg] = request.user.id
+            return HttpResponseRedirect(reverse_lazy('users:privacy_settings', kwargs=self.kwargs))
+        return super(PrivacySettingsView, self).dispatch(request, *args, **kwargs)
+
     def get_object(self, queryset=None):
         return PrivacySettings.objects.get(pk=self.kwargs[PrivacySettingsView.pk_url_kwarg])
 
@@ -117,6 +130,12 @@ class CustomUserDeleteView(generic.DeleteView):
     template_name = 'users/user_confirm_delete.html'
     pk_url_kwarg = 'user_id'
     model = CustomUser
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.id != self.kwargs[CustomUserDeleteView.pk_url_kwarg]:
+            self.kwargs[CustomUserDeleteView.pk_url_kwarg] = request.user.id
+            return HttpResponseRedirect(reverse_lazy('users:delete', kwargs=self.kwargs))
+        return super(CustomUserDeleteView, self).dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
         return reverse_lazy('users:delete_done')
