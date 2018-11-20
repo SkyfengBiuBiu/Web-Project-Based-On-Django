@@ -5,50 +5,104 @@
     <title>discussion detail</title>
 </head>
 <body>
-    <h1>this is discussion detail test</h1>
-    <table  border="8">
-        <thead>
-            <tr>
-                <th>send time</th>
-                <th>user id</th>
-                <th>content</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for chat in chat_list %}
-                <tr>
-                    <td>{{ chat.headline }}</td>
-                    <td>{{ chat.user_id }}</td>
-                    <td>{{ chat.content }}</td>
-                    <td>
-                        <form method="post" id="DeleteMessageForm" action="/discussions/{{ discussion_id }}/detail">
-                            {% csrf_token %}
-                            <p><input type="hidden" name="id" value={{ chat.id }}></p>
-                            <p><input type="hidden" name="user_id" value={{ chat.user_id }}></p>
-                            <p><input type="hidden" name="SendOrDelete" value="delete"></p>
-                            <input type="submit" value='delete'>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <form method="post" id="ChatMessageForm" action="/discussions/{{ discussion_id }}/detail">
-        {% csrf_token %}
-        <p><input id="time" type="hidden" name="timestamp"/></p>
-        <p><input type="text" name="MessageContent"/></p>
-        <p><input type="hidden" name="SendOrDelete" value="send"/></p>
-        <input type="button" onclick='botton_click()' value='send'>
-        <script>
-            function add0(m){return m<10?'0'+m:m }
-            function botton_click(){
-                var time = new Date();
-                var new_date =  time.getFullYear()+'-'+add0(time.getMonth()+1)+'-'+add0(time.getDate())+' '+add0(time.getHours())+':'+add0(time.getMinutes())+':'+add0(time.getSeconds());
+<h1>this is discussion detail test</h1>
+<table border="8">
+    <thead>
+    <tr>
+        <th>send time</th>
+        <th>user id</th>
+        <th>content</th>
+    </tr>
+    </thead>
+    <tbody id="id_chat_message_list">
+    </tbody>
+</table>
+<form method="post" id="ChatMessageForm" action="/discussions/{{ discussion_id }}/detail">
+    <div id="id_chat_message_form">
+        {% include 'discussions/chat_message_form.html' %}
+    </div>
+    <input type="submit" value='send'>
+</form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        ajax_chat_message_loading();
+        id_chat_message_form_loading();
+    });
 
-                document.getElementById("time").value = new_date;
-                document.getElementById("ChatMessageForm").submit()
-            }
-        </script>
-    </form>
+    function ajax_chat_message_loading() {
+        $('#id_chat_message_list').load("{% url 'discussions:discussion_post' discussion_id %}", refreshForm1);
+        setTimeout("ajax_chat_message_loading()", 5000);
+    }
+
+    function id_chat_message_form_loading() {
+        $('#id_chat_message_form').load("{% url 'discussions:discussion_post_form' %}", refreshForm);
+    }
+
+    function refreshForm() {
+        $("#ChatMessageForm").on("submit", function (event) {
+            event.preventDefault();
+
+            var time = new Date();
+            var new_date = time.getFullYear() + '-' + add0(time.getMonth() + 1) + '-' + add0(time.getDate()) + ' ' + add0(time.getHours()) + ':' + add0(time.getMinutes()) + ':' + add0(time.getSeconds());
+            document.getElementById("time").value = new_date;
+
+            $.ajax({
+                data: $(this).serialize(),
+                type: $(this).attr('method'),
+                url: $(this).attr('action'),
+                success: function (response) {
+                    console.log(response.success)
+                    id_chat_message_form_loading();
+                },
+                error: function (data) {
+                    // @Todo
+                }
+            });
+        });
+    }
+    function refreshForm1() {
+        $(".DeleteFormClass").on("submit", function (event) {
+            event.preventDefault();
+
+
+            $.ajax({
+                data: $(this).serialize(),
+                type: $(this).attr('method'),
+                url: $(this).attr('action'),
+                success: function (response) {
+                    console.log(response.success)
+                    $('#id_chat_message_list').load("{% url 'discussions:discussion_post' discussion_id %}", refreshForm1);
+                },
+                error: function (data) {
+                    // @Todo
+                }
+            });
+        });
+    }
+    function add0(m) {
+        return m < 10 ? '0' + m : m
+    }
+
+    function botton_click() {
+        var time = new Date();
+        var new_date = time.getFullYear() + '-' + add0(time.getMonth() + 1) + '-' + add0(time.getDate()) + ' ' + add0(time.getHours()) + ':' + add0(time.getMinutes()) + ':' + add0(time.getSeconds());
+
+        document.getElementById("time").value = new_date;
+        document.getElementById("ChatMessageForm").submit()
+    }
+
+    //更新消息
+    {#function updateMsg() {#}
+    {#    $.post(#}
+    {#        "{% url 'discussions:discussion_post' %}",#}
+    {#        {},#}
+    {#        function (data) {#}
+    {#            $('.list-group-item').load(data);    //解析返回的 xml#}
+    {#        });#}
+    {#    setTimeout("updateMsg()", 1000);#}
+    {#    console.log("sfgfwgefgsfdg");//每秒更新一次#}
+    {# } #}
+</script>
 </body>
 </html>

@@ -7,7 +7,7 @@ from datetime import datetime
 # Create your models here.
 class ChatMessage(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    headline = models.DateTimeField("chat published")
+    headline = models.DateTimeField(default=datetime.now, blank=True)
     content = models.CharField(max_length=200)
 
     def __str__(self):
