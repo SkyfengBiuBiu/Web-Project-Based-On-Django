@@ -55,20 +55,20 @@ The features that we have implemented and will implement are listed below.
 
 Features | Status | Timetable
 -------- | ------ | ---------
-1. Exceptional quality of the initial project plan document | Complete | 07.11.2018
-2. Mid-project check-in shows faster than expected progress | Underway | 21.11.2018
-3. Make users and discussions searchable | Underway | 28.11.2018
-4. Email validation on sign-up | Complete | 15.11.2018
-5. Reset forgotten password | Complete | 12.11.2018
-6. Use separate Django apps for different parts of your project | Complete | 04.11.2018
-7. Status messages on the users’ profile pages | Underway | 28.11.2018
+1.Exceptional quality of the initial project plan document | Complete | 07.11.2018
+2.Mid-project check-in shows faster than expected progress | Underway | 21.11.2018
+3.Make users and discussions searchable | Underway | 28.11.2018
+4.Email validation on sign-up | Complete | 15.11.2018
+5.Reset forgotten password | Complete | 12.11.2018
+6.Use separate Django apps for different parts of your project | Complete | 04.11.2018
+7.Status messages on the users’ profile pages | Underway | 28.11.2018
 
 ### Two star features
 
 Features | Status | Timetable
 -------- | ------ | ---------
-1. Using Bootstrap for mobile friendliness | Underway | 28.11.2018
-2. Use PostgreSQL as database | Complete | 03.11.2018
+1.Using Bootstrap for mobile friendliness | Underway | 28.11.2018
+2.Use PostgreSQL as database | Complete | 03.11.2018
 
 
 ## Pages and navigation
