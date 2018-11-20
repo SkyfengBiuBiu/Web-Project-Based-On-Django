@@ -1,30 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>discussion detail</title>
-</head>
-<body>
-<h1>this is discussion detail test</h1>
-<table border="8">
-    <thead>
-    <tr>
-        <th>send time</th>
-        <th>user id</th>
-        <th>content</th>
-    </tr>
-    </thead>
-    <tbody id="id_chat_message_list">
-    </tbody>
-</table>
-<form method="post" id="ChatMessageForm" action="/discussions/{{ discussion_id }}/detail">
-    <div id="id_chat_message_form">
-        {% include 'discussions/chat_message_form.html' %}
-    </div>
-    <input type="submit" value='send'>
-</form>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script>
     $(document).ready(function () {
         ajax_chat_message_loading();
         id_chat_message_form_loading();
@@ -92,17 +65,3 @@
         document.getElementById("ChatMessageForm").submit()
     }
 
-    //更新消息
-    {#function updateMsg() {#}
-    {#    $.post(#}
-    {#        "{% url 'discussions:discussion_post' %}",#}
-    {#        {},#}
-    {#        function (data) {#}
-    {#            $('.list-group-item').load(data);    //解析返回的 xml#}
-    {#        });#}
-    {#    setTimeout("updateMsg()", 1000);#}
-    {#    console.log("sfgfwgefgsfdg");//每秒更新一次#}
-    {# } #}
-</script>
-</body>
-</html>

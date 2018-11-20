@@ -1,0 +1,16 @@
+{% for chat in chat_list %}
+    <tr>
+        <td>{{ chat.headline }}</td>
+        <td>{{ chat.user_id }}</td>
+        <td>{{ chat.content }}</td>
+        <td>
+            <form method="post" id="DeleteMessageForm" class="DeleteFormClass" action="/discussions/{{ discussion_id }}/detail">
+                {% csrf_token %}
+                <p><input type="hidden" name="id" value={{ chat.id }}></p>
+                <p><input type="hidden" name="user_id" value={{ chat.user_id }}></p>
+                <p><input type="hidden" name="SendOrDelete" value="delete"></p>
+                <input type="submit" value='delete'>
+            </form>
+        </td>
+    </tr>
+{% endfor %}
