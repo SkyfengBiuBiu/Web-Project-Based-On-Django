@@ -30,22 +30,45 @@ Start the documentation with identifying information:
 
 ## Must have features
 
-Tasks | Description of must have features | Time of the deadline<br>(DD.MM.YYYY [HH:MM]） 
------------- | ------------- | ------------
-Set up development environment |1. Create virtual environment for the project.<br>2. Deploy demo site to Heroku.<br>3. Use GitLab’s issue board for creating tasks  | 31.10.2018
-Design | 1. Design of users app.<br>2. Design of users’ profile app.<br>3. Design of friendship app.<br>4. Design of discussion app.<br>5. Design of event app.<br>6. Reorganize the tasks on the GitLab’s issue board.  | 3.11.2018 23:59
-implement | 1. Description of the web service data and functionality(Create models including user,users’ profile,friendship,discussions and events.)<br>2. During the web development, we would be aware of project’s progress.<br>3. The gitlab commits should be small and precise.<br>4. often update the deployment on the heroku.<br>5. Update the tasks on on the GitLab’s issue board.  | 28.11.2018 23:59
-test | 1. With the validator, validate the Web app codes.<br>2. Deploy our site with DEBUG = False in Django project’s settings.py to Heroku, and test it.  | 07.12.2018 23:59
+Most of the must have features have been implemented. And some advanced improvements will be taken in the near future.
+
+Must Have Features | Implementation Description | Timetable
+------------------ | -------------------------- | ---------
+ 1.Use a virtual environment | 1.Add virtualenv environment settings in this project.<br>2.Add Pillow in “Pipfile” and “requirement.txt” for supporting Django’s ImageField. | 31.10.2018
+ 2.Get the Web development basics right | 1.CSS and HTML checking is underway.<br>2.Code refactoring and commenting is underway. | 28.11.2018
+ 3.Test also with DEBUG=False in Django project’s settings.py | 1.Deployment on Heroku is working with DEBUG=False. | 21.11.2018
+ 4.User App Functionality | 1.Admin user model is implemented using Django’s Admin functionality.<br>2.Admin user has full CRUD permissions to manipulate all of the website data. <br>3.Normal user model is implemented based on Django’s User model. <br>4.Normal user can join the site, and existing users can delete their accounts. <br>5.Existing user can login and logout site. <br>6.Existing user can enter, modify and delete their mandatory information, including first name, last name, phone number, address. We use first name and last name as users’ real name. And they also can modify their additional information, including age, gender, date of birth, and photo. | 28.11.2018
+ 5.Profile App Functionality | 1.Each user has their own profile page, presenting their basic information, post list, friend list and discussion list. <br>2.The privacy settings include “just me”, “friends”, “public”. User can modify their privacy settings for different data: real name, email, phone, address, friend list. <br>3.User can edit and save all of their own data using their profile edit page. | 28.11.2018
+ 6.Friendship App Functionality | 1.Admin friendship model is implemented using Django's Admin functionality. <br>2.Admin user has full CRUD permissions to manipulate all of the website data. <br>3.Existing friendship model is implemented based on relationship between sender and recipient.4.Existing users can search all users and view every user's basic profile. <br>5.Existing users can send friendship request to corresponding users from profile page. Besides, They can check their sent friendship request and delete it, they can check received friendship request from others and choose to accept or decline it. <br>6.Existing users can view their friendship list once friendship request is accepted, or they can view notification list which shows declined information | 28.11.2018
+ 7.Discussions App Functionality | 1.Admin Discussion and ChatMessage models are implemented using Django's Admin functionality. <br>2.Admin user has full CRUD permissions to manipulate all of the website data. <br>3.Existing Discussion model is implemented to build a channel for communication between the creator and users. <br>4.Existing ChatMessage model is implemented to convey information among discussion members. It involves the features, such as user, headline (presenting time) and message content. <br>5.Existing user can view his or her discussion list and create a new discussion as a creator with related topic and selected users. Besides enrolling the discussions, they also have the right to leave. <br>6.Existing user can send chat messages to others in the enrolled discussion. The presentation of messages would be updated every five seconds. In the situation, he or she would like to hide the message, both the message sender and the discussion creator could delete it. | 28.11.2018
+ 8.Use GitLab’s Issue Board for handling tasks | 1.Add project tags: design, development, feature, testing, production.<br>2.Publish project tasks on the GitLab’s Issue Board. <br>3.Assign tasks to group members. <br>4.Monitor the progress of the project and each tasks. | 28.11.2018
+ 9.GitLab commits | 1.Important GitLab commits have small and precise commit messages.<br>2.Some small part of commits are not well described. | 28.11.2018
+ 10.Be aware of your project’s progress | 1.The must have features are almost implemented at this point.<br>2.Four one star features have been implemented completely. <br>3.Two two star features have been implemented and maybe improved in this week. <br>4.Some other features will been considered in the future. | 28.11.2018
+ 11.Deploy your site to Heroku, and update the deployment often | 1.Successfully deploying our site to Heroku with DEBUG=False.<br>2.Updating is done twice a week. | 28.11.2018
 
 
 ## Planned +2 features
 
-Tasks | Description of must have features | Time of the deadline<br>(DD.MM.YYYY [HH:MM] )
------------- | ------------- | ------------
-Design | 1. Finnish the high quality of the initial project plan document.  | 3.11.2018 23:59
-Implement | 1. mid-project check-in shows faster than expected progress<br>2. Make users, events and discussions searchable<br>3. Email validation on sign-up.<br>4. Reset forgotten password.<br>5. Use separate Django apps for different parts of your project.<br>6. Using Bootstrap for mobile friendliness.<br>7. Use PostgreSQL as database.<br>8. Create the group  | 28.11.2018 23:59
-Testing | Unit Testing using Django Test | 07.12.2018 23:59
+The features that we have implemented and will implement are listed below.
 
+### One star features
+
+Features | Status | Timetable
+-------- | ------ | ---------
+1.Exceptional quality of the initial project plan document | Complete | 07.11.2018
+2.Mid-project check-in shows faster than expected progress | Underway | 21.11.2018
+3.Make users and discussions searchable | Underway | 28.11.2018
+4.Email validation on sign-up | Complete | 15.11.2018
+5.Reset forgotten password | Complete | 12.11.2018
+6.Use separate Django apps for different parts of your project | Complete | 04.11.2018
+7.Status messages on the users’ profile pages | Underway | 28.11.2018
+
+### Two star features
+
+Features | Status | Timetable
+-------- | ------ | ---------
+1.Using Bootstrap for mobile friendliness | Underway | 28.11.2018
+2.Use PostgreSQL as database | Complete | 03.11.2018
 
 
 ## Pages and navigation
@@ -74,7 +97,7 @@ Users in the site administrator user group have full CRUD permissions on all res
 
 Profile:
 User’s profile has both public and private data. Private data is only shown to other logged in users that are friends of this user. The data on the profile page could be edited and saved.
-The profile mainly includes the status message, friend list, discussion list, event list and group list.
+The profile mainly includes the status message, friend list, and discussion list.
 In the status message, user could update, and to which user’s friends can comment on.
 
 
@@ -89,36 +112,33 @@ Discussion:
 Discussion model contains two aspects: discussion details and the comment issue. In discussion details, the discussion list would exit. The comment addresses the username, date and time and the main content.
 
 
-
-Event:
-The event model describes the events and event invitation. The event involves the creator’s name, the description, event category, duration for the vent and the place where the event take  place. And the event invitation is for users to invite the other users to join the events.
-
-
-
-Groups:
-The group has the two aspects: the basic information and discussion. In the basic information, the name and description would be stated in this side. The users who focus on the same subject or could meet place for a group of friends could be divided into the same group.
-
-
 ### URIs
 
-URL | Template 
+URI | Description 
 ------------ | ------------- 
-/ | users/login.html
-users/{user_id}/password_change | users/password_change.html
-users/{user_id}/password_reset | users/password_reset.html 
-users/signup | users/signup.html
-users/{user_id}/detail | users/user_detail.html
-profiles/{user_id}/home | profiles/profile_home.html 
-friendships/{user_id}/home | friendships/friendship_home.html
-friendships/{user_id}/request | friendships/friendship_request.html
-discussions/{user_id}/home | discussions/discussion_home.html 
-discussions/{discussion_id}/detail | discussions/discussion_detail.html
-events/{user_id}/home | events/event_home.html
-events/{event_id}/detail | events/event_detail.html 
-events/{user_id}/invitation | events/event_invitation.html
-groups/{user_id}/home | groups/group_home.html
-groups/{group_id}/detail | groups/group_detail.html 
-
+/ | Default URI when user navigate the web site.
+/admin | URIs wrt Django's Admin panels.
+/users/login/ | URI for User Login.
+/users/logout/ | URI for User Logout.
+/users/password_reset/ | URI for User Password Reset.
+/users/signup/ | URI for User Sign Up View.
+/users/signup/done | URI for Sign Up Done View.
+/users/signup/<uidb64>/<token>/ | URI for Sign Up Confirm View.
+/users/{user_id}/profile/ | URI for User Profile View.
+/users/{user_id}/settings/ | URI for Privacy Settings View.
+/users/{user_id}/delete/ | URI for User Account Delete View.
+/users/delete/done/ | URI for User Account Delete Done View.
+/profiles/ | URI for User's own Profile Home View.
+/profiles/{user_id}/home/ | URI for Visiting User's Profile Home View.
+/profiles/post/create/ | URI for Post Create View.
+/profiles/post/{user_id}/list/{page_no}/ | URI for Post List View.
+/discussions/{user_id}/home | URI for Discussions List View.
+/discussions/{discussion_id}/detail | URI for Discussion Detail View.
+/discussions/create/ | URI for Discussion Create View.
+/discussions/{discussion_id}/{user_id}/leave | URI for User Leave Discussion View.
+/friendships/{user_id}/home/ | URI for User Friendship View.
+/friendships/{user_id}/request/ | URI for Friendship Request View.
+/friendships/{user_id}/{recipient_id}/profile/ | URI for Friendship Request Manipulation View.
 
 
 ### Needed Django views and templates
@@ -126,59 +146,78 @@ groups/{group_id}/detail | groups/group_detail.html
 #### Views
 View | Parameters | Rendered Template
 ------------ | ------------- | ------------
-LoginView | -  | users/login.html
-PasswordChangeView | user_id  | users/password_change.html
-PasswordResetView | user_id  | users/password_reset.html
-SignUpView | -  | users/signup.html
-UserDetailView | user_id  | users/user_detail.html
-ProfileHomeView | user_id  | profiles/profile_home.html
-FriendshipHomeView | user_id  | friendships/friendship_home.html
-FriendshipRequestView | user_id  | friendships/friendship_request.html
-DiscussionHomeView | user_id  | discussions/discussion_home.html
-DiscussionDetailView | discussion_id  | discussions/discussion_detail.html
-EventHomeView | user_id  | events/event_home.html
-EventDetailView | event_id  | events/event_detail.html
-EventInvitationView | user_id  | events/event_invitation.html
-GroupHomeView | user_id  | groups/group_home.html
-GroupDetailView | group_id  | groups/group_detail.html
+profiles.MyHomeView | - | profiles/profile_home.html
+users.CustomPasswordResetView | - | users/password_change_form.html
+users.SignUpView | - | users/signup.html
+users.SignUpDoneView | - | users/signup_done.html
+users.SignUpConfirmView | uidb64, token | users/signup_confirm.html
+users.UserProfileView | user_id | users/user_profile.html
+users.PrivacySettingsView | user_id | users/user_privacy_settings.html
+users.CustomUserDeleteView | user_id | users/user_confirm_delete.html
+users.CustomUserDeleteDoneView | - | users/user_delete_done.html
+users.VisitingHomeView | user_id | profiles/profile_home.html
+profiles.PostCreateView | - | profiles/post/post_create_form.html
+profiles.PostListView | user_id, page_no | profiles/post/post_list.html
+discussions.home | user_id | discussions/discussion_home.html
+discussions.detail | discussion_id | discussions/discussion_detail.html
+discussions.CreateDiscussionView | - | discussions/discussion_create.html
+discussions.leave | discussion_id, user_id | discussions/discussion_home.html
+friendships.home | user_id | friendships/friendship_home.html
+friendships.request | user_id | friendships/friendship_request.html
+friendships.profile | user_id, recipient_id | friendships/friendship_profile.html
 
 
 
 #### Templates
 Template | Description 
 ------------ | ------------- 
-users/login.html | 1. Actions: login.<br>2. Forms: LoginForm. 
-users/password_change.html | 1. Actions: change.<br>2. Forms: PasswordChangeForm.
-users/password_reset.html | 1. Actions: reset.<br>2. Forms: PasswordResetForm.  
-users/signup.html | 1. Actions: signup.<br>2. Forms: SignUpForm. 
-users/user_detail.html | 1. Actions: update.<br>2. Forms: UserDetailForm.  
-profiles/profile_home.html | 1. Actions: edit, delete.<br>2. Forms: UserDetailForm.<br>3. Lists: discussions, friendships, events, groups.
-friendships/friendship_home.html | 1. Actions: delete.  
-friendships/friendship_request.html | 1. Actions: delete, accept, decline, ignore. 
-discussions/discussion_home.html | -  
-discussions/discussion_detail.html | 1. Actions: leave, send message.<br>2. Forms: ChatMessageForm. 
-events/event_home.html | - 
-events/event_detail.html | 1. Actions: send invitation.<br>2. Forms: EventInvitationForm.
-events/event_invitation.html | 1.Actions: delete, accept, decline, ignore.  
-groups/group_home.html | -
-groups/group_detail.html | 1.Actions: leave. 
+users/templates/registration/login.html | 1. Actions: login.<br>2. Forms: username and password input form. 
+users/templates/registration/password_change_done.html | show information that users have changed their password successfully.
+users/templates/registration/password_change_form.html | 1. Actions: change password.<br>2. Forms: old and new password input form.
+users/templates/registration/password_reset_complete.html | 1. Actions: reset password.<br>2. Forms: username and email address input form.
+users/templates/registration/password_reset_confirm.html | show information that users can reset their password with further instructions.
+users/templates/registration/password_reset_done.html | show information that users have reset their password successfully.
+users/templates/registration/password_reset_form.html | 1. Actions: reset password.<br>2. Forms: new password input form.
+users/templates/users/signup.html | 1. Actions: sign up.<br>2. Forms: user sign up form.
+users/templates/users/signup_confirm.html | show further information for users to complete their signup.
+users/templates/users/signup_done.html | show information that users have activated their account.
+users/templates/users/signup_email_template.html | sign-up email validation form.
+users/templates/users/user_base.html | basic template page for Users App.
+users/templates/users/user_confirm_delete.html | 1. Actions: delete user account.
+users/templates/users/user_delete_done.html | show successful information that users have deleted their account.
+users/templates/users/user_privacy_settings.html | 1. Actions: change privacy settings.<br>2. Forms: privacy setting form.
+users/templates/users/user_profile.html | 1. Actions: modify user profile information.<br>2. Forms: profile information form.
+profiles/templates/profiles/profile_base.html | basic template page for Profiles App.
+profiles/templates/profiles/profile_home.html | show users profile information and post, friend, dicussion list.
+profiles/templates/profiles/post/post_create_form.html | post message form.
+profiles/templates/profiles/post/post_list.html | post message list.
+friendships/templates/friendships/friendship_home.html | show users' friend list.
+friendships/templates/friendships/friendship_request.html | show friendship request list.
+discussions/templates/discussions/discussion_home.html | show users' discussion list.
+discussions/templates/discussions/discussion_detail.html | 1. Actions: show discussion detail, send and delete messages.<br>2. Forms: MessageForm.
+discussions/templates/discussions/discussion_create.html | discussion creation form.
 
 
 ### Heroku deployment
 
 https://sheltered-badlands-86452.herokuapp.com/
 
+Testing Account | type | password
+--------------- | ---- | --------
+TestUser1 | normal user | test4sns
+TestUser2 | normal user | test4sns
+AdminUser1 | admin | test4sns
+
 Heroku deployment plan:
-- Everyone in our group
+- Huang Xie 281685
 - Twice a week
 
 
 ## Testing
-1. Unit Testing: unit testing tasks will carry out during the development cycle.
-2. Integration Testing: after each app was implemented, phased integration testing would be conducted.
-3. Deployment Testing: after integration testing, there would be a phased deployment testing.
+1. Unit Testing: unit testing tasks are carried out for Users App, Profiles App, Discussions App and Friendship App.
+2. Integration Testing: First phase for integration testing is underway.
+3. Deployment Testing: First phase deployment testing is underway.
 
-The testing tasks will be carried out by each member of our group corresponding to different app in this project.
 
 
 ## Project timetable and division of work
@@ -218,14 +257,7 @@ No. | Task Name | Features | Developer | Start | End
 -| -- Functional Implementation|Mandatory| |2018/11/04|2018/11/28
 -| -- Discussions Searchable|+1| |2018/11/04|2018/11/28
 -| -- Unit Testing using Django Test|+3| |2018/11/04|2018/11/28
--|Events App| |Liang Fang|2018/11/04|2018/11/28
--| -- Functional Implementation|Mandatory| |2018/11/04|2018/11/28
--| -- Events Searchable|+1| |2018/11/04|2018/11/28
--| -- Unit Testing using Django Test|+3| |2018/11/04|2018/11/28
--|Groups App| |Liang Fang|2018/11/04|2018/11/28
--| -- Functional Implementation|Mandatory| |2018/11/04|2018/11/28
--| -- Unit Testing using Django Test|+3| |2018/11/04|2018/11/28
-8|Mid-Project Check-in| |Huang Xie, Yan Feng, Liang Fang|2018/11/21|2018/11/21
+8|Mid-Project Check-in|+1|Huang Xie, Yan Feng, Liang Fang|2018/11/21|2018/11/21
 9|Integration Testing| |Huang Xie, Yan Feng, Liang Fang|2018/11/29|2018/12/04
 10|Deployment Testing| |Huang Xie, Yan Feng, Liang Fang|2018/12/05|2018/12/08
 11|Final Project Documents| |Huang Xie, Yan Feng, Liang Fang|2018/12/05|2018/12/08
