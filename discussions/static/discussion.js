@@ -65,3 +65,12 @@
         document.getElementById("ChatMessageForm").submit()
     }
 
+    function GetRequest() {
+          var url = location.search;
+         $( "#success" ).load( url);
+         console.log("hello");
+         self.location=document.referrer;
+      return false;
+}
+
+

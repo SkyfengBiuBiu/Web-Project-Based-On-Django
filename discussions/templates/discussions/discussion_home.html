@@ -41,7 +41,7 @@
                                             {% endfor %}
                                 </p>
                                 <div>
-                                    <a  class="card-link" href="{% url 'discussions:discussion_detail' discussion.id %}"><i class="fa fa-gittip"></i> Enroll</a>
+                                    <a  class="discussion_details" class="card-link" href="{% url 'discussions:discussion_detail' discussion.id %}"><i class="fa fa-gittip"></i> Enroll</a>
                                     <a  class="card-link"href="{% url 'discussions:discussion_confirm_leave' discussion.id user_id %}"><i class="fa fa-mail-forward"></i> Leave</a>
                                 </div>
                             </div>
@@ -55,11 +55,71 @@
         </div>
             {% endblock %}
     {% block left %}
+        <div class="mesgs">
+        <div class="push"></div>
+          <div class="msg_history" >
+            <div class="incoming_msg">
+              <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+              <div class="received_msg">
+                <div class="received_withd_msg">
+                  <p>Test which is a new approach to have all
+                    solutions</p>
+                  <span class="time_date"> 11:01 AM    |    June 9</span></div>
+              </div>
+            </div>
+            <div class="outgoing_msg">
+              <div class="sent_msg">
+                <p>Test which is a new approach to have all
+                  solutions</p>
+                <span class="time_date"> 11:01 AM    |    June 9</span> </div>
+            </div>
+            <div class="incoming_msg">
+              <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+              <div class="received_msg">
+                <div class="received_withd_msg">
+                  <p>Test, which is a new approach to have</p>
+                  <span class="time_date"> 11:01 AM    |    Yesterday</span></div>
+              </div>
+            </div>
+            <div class="outgoing_msg">
+              <div class="sent_msg">
+                <p>Apollo University, Delhi, India Test</p>
+                <span class="time_date"> 11:01 AM    |    Today</span> </div>
+            </div>
+            <div class="incoming_msg">
+              <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+              <div class="received_msg">
+                <div class="received_withd_msg">
+                  <p>We work directly with our designers and suppliers,
+                    and sell direct to you, which means quality, exclusive
+                    products, at a price anyone can afford.</p>
+                  <span class="time_date"> 11:01 AM    |    Today</span></div>
+              </div>
+            </div>
+          </div>
 
-{#{% include 'discussions/4/discussion_detail.html ' %}#}
+        </div>
+      </div>
 
          {% endblock %}
     </div>
 
     </div></div>
+{% endblock %}
+
+{% block js-extra-script %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            refreshPosts();
+        });
+
+        function refreshPosts() {
+            $(".discussion_details").on('click', function (event) {
+                event.preventDefault();
+                $(".mesgs").load($(this).attr('href')); // refresh posts list
+            });
+        }
+
+    </script>
 {% endblock %}
