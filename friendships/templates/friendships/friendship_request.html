@@ -6,32 +6,28 @@
 
 {% block content %}
 
-    <div class="container" >
-        <table class="table table-sm" >
+    <div class="container table-responsive" style="padding: 0rem;">
+        <table class="table table-sm">
             <thead class="thead-default">
             <tr>
                 <th style='vertical-align: middle;text-align: center;'>Sender Real Name</th>
                 <th style='vertical-align: middle;text-align: center;'>Sender Username</th>
-                <th style='vertical-align: middle;text-align: center;'>Recipient Real Name</th>
                 <th style='vertical-align: middle;text-align: center;'>Recipient Username</th>
                 <th style='vertical-align: middle;text-align: center;'>Date</th>
                 <th style='vertical-align: middle;text-align: center;'></th>
             </tr>
             </thead>
             <tbody>
-                <tr style='vertical-align: middle;text-align: center;'>
-                    <td colspan="6" class="table-active"><h4>Sending Request</h4></td>
-                </tr>
-                {% for request_sending in request_sending_list %}
+            <tr style='vertical-align: middle;text-align: center;'>
+                <td colspan="6" class="table-active"><h4>Sending Request</h4></td>
+            </tr>
+            {% for request_sending in request_sending_list %}
                 <tr>
                     <td style='vertical-align: middle;text-align: center;'>
                         {{ request_sending.sender.first_name }} {{ request_sending.sender.last_name }}
                     </td>
                     <td style='vertical-align: middle;text-align: center;'>
                         {{ request_sending.sender.username }}
-                    </td>
-                    <td style='vertical-align: middle;text-align: center;'>
-                        {{ request_sending.recipient.first_name }} {{ request_sending.recipient.last_name }}
                     </td>
                     <td style='vertical-align: middle;text-align: center;'>
                         {{ request_sending.recipient.username }}
@@ -45,28 +41,25 @@
                             <p><input type="hidden" name="recipient_id" value="{{ request_sending.recipient_id }}"/></p>
                             <p><input type="hidden" name="sender_id" value="{{ request_sending.sender_id }}"/></p>
                             <p><input type="hidden" name="SendOrRecvOrFriendOrNotification" value="send"/></p>
-                            <div style="position:relative;left: 10px;bottom: 7px;">
-                                <input type="submit" class="btn btn-primary" value="delete">
+                            <div>
+                                <input type="submit" class="btn btn-primary btn-sm" value="delete">
                             </div>
                         </form>
                     </td>
                 </tr>
-                {% endfor %}
+            {% endfor %}
 
 
-                <tr style='vertical-align: middle;text-align: center;'>
-                    <td colspan="6" class="table-success"><h4>Receive Request</h4></td>
-                </tr>
-                {% for request_receive in request_receive_list %}
+            <tr style='vertical-align: middle;text-align: center;'>
+                <td colspan="6" class="table-success"><h4>Receive Request</h4></td>
+            </tr>
+            {% for request_receive in request_receive_list %}
                 <tr>
                     <td style='vertical-align: middle;text-align: center;'>
                         {{ request_receive.sender.first_name }} {{ request_receive.sender.last_name }}
                     </td>
                     <td style='vertical-align: middle;text-align: center;'>
                         {{ request_receive.sender.username }}
-                    </td>
-                    <td style='vertical-align: middle;text-align: center;'>
-                        {{ request_receive.recipient.first_name }} {{ request_receive.recipient.last_name }}
                     </td>
                     <td style='vertical-align: middle;text-align: center;'>
                         {{ request_receive.recipient.username }}
@@ -81,7 +74,7 @@
                             <p><input type="hidden" name="sender_id" value="{{ request_receive.sender_id }}"/></p>
                             <p><input type="hidden" name="SendOrRecvOrFriendOrNotification" value="receive"/></p>
                             <p><input type="hidden" name="status" value="accept"/></p>
-                            <div style="position:relative;left: 10px;bottom: 9px;">
+                            <div>
                                 <input type="submit" class="btn btn-primary btn-sm" value="accept">
                             </div>
                         </form>
@@ -91,28 +84,25 @@
                             <p><input type="hidden" name="sender_id" value="{{ request_receive.sender_id }}"/></p>
                             <p><input type="hidden" name="SendOrRecvOrFriendOrNotification" value="receive"/></p>
                             <p><input type="hidden" name="status" value="decline"/></p>
-                            <div style="position:relative;left: 10px;bottom: 9px;">
+                            <div>
                                 <input type="submit" class="btn btn-primary btn-sm" value="decline">
                             </div>
                         </form>
                     </td>
                 </tr>
-                {% endfor %}
+            {% endfor %}
 
 
-                <tr style='vertical-align: middle;text-align: center;'>
-                    <td colspan="6" class="table-danger"><h4>Declined Notification List</h4></td>
-                </tr>
-                {% for request_decline_notification in request_decline_notification_list %}
+            <tr style='vertical-align: middle;text-align: center;'>
+                <td colspan="6" class="table-danger"><h4>Declined Notification List</h4></td>
+            </tr>
+            {% for request_decline_notification in request_decline_notification_list %}
                 <tr>
                     <td style='vertical-align: middle;text-align: center;'>
                         {{ request_decline_notification.sender.first_name }} {{ request_decline_notification.sender.last_name }}
                     </td>
                     <td style='vertical-align: middle;text-align: center;'>
                         {{ request_decline_notification.sender.username }}
-                    </td>
-                    <td style='vertical-align: middle;text-align: center;'>
-                        {{ request_decline_notification.recipient.first_name }} {{ request_decline_notification.recipient.last_name }}
                     </td>
                     <td style='vertical-align: middle;text-align: center;'>
                         {{ request_decline_notification.recipient.username }}
@@ -123,16 +113,18 @@
                     <td>
                         <form method="post" action="/friendships/{{ user_id }}/request/">
                             {% csrf_token %}
-                            <p><input type="hidden" name="sender_id" value="{{ request_decline_notification.sender_id }}"/></p>
-                            <p><input type="hidden" name="recipient_id" value="{{ request_decline_notification.recipient_id }}"/></p>
+                            <p><input type="hidden" name="sender_id"
+                                      value="{{ request_decline_notification.sender_id }}"/></p>
+                            <p><input type="hidden" name="recipient_id"
+                                      value="{{ request_decline_notification.recipient_id }}"/></p>
                             <p><input type="hidden" name="SendOrRecvOrFriendOrNotification" value="notification"/></p>
-                            <div style="position:relative;left: 10px;bottom: 7px;">
+                            <div>
                                 <input type="submit" class="btn btn-primary btn-sm" value="delete">
                             </div>
                         </form>
                     </td>
                 </tr>
-                {% endfor %}
+            {% endfor %}
 
             </tbody>
         </table>
