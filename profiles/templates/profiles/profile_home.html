@@ -26,6 +26,9 @@
             <ul class="list-group list-group-flush">
                 {% for discussion in discussion_list %}
                     <li class="list-group-item">
+                        <a href="{% url 'discussions:discussion_detail' discussion.id %}">
+                            <span>{{ discussion.topic }}</span>
+                        </a>
                     </li>
                 {% endfor %}
             </ul>

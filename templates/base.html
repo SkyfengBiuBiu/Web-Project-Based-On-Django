@@ -57,20 +57,11 @@
                     <a class="nav-link" href="{% url 'friendships:friendship_home' user.id %}">Find Friends</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'friendships:friendship_request' user.id %}">
-                        Friend Requests <span class="badge badge-secondary">4</span>
-                    </a>
+                    <a class="nav-link" href="{% url 'friendships:friendship_request' user.id %}">Friend Requests</a>
                 </li>
-                {#                <li class="nav-item">#}
-                {#                    <a class="nav-link" href="#">#}
-                {#                        Messages <span class="badge badge-success">4</span>#}
-                {#                    </a>#}
-                {#                </li>#}
-                {#                <li class="nav-item">#}
-                {#                    <a class="nav-link" href="#">#}
-                {#                        Notifications <span class="badge badge-info">4</span>#}
-                {#                    </a>#}
-                {#                </li>#}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'discussions:discussion_home' user.id %}">Discussions</a>
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="userHeadImg" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">

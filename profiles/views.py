@@ -6,6 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.csrf import csrf_protect
 
+from discussions.models import Discussion
 from friendships.models import Friendship
 from profiles.forms import PostForm
 from profiles.models import Post
@@ -28,9 +29,9 @@ class ProfilesHomeView:
         # Friends List
         context['friend_list'] = self.get_friends(owner, 1)
         # Discussions List
-        context['discussion_list'] = self.get_discussions(owner)
-        # Events List
-        context['event_list'] = self.get_events(owner)
+        context['discussion_list'] = self.get_discussions(owner, 1)
+        # Friendship Requests List
+        context['friend_request_list'] = self.get_requests(owner, 1)
         return context
 
     def get_posts(self, user, page_no):
@@ -45,10 +46,12 @@ class ProfilesHomeView:
         paginator = Paginator(friend_list, friend_page_size)
         return paginator.get_page(page_no)
 
-    def get_discussions(self, user):
-        pass
+    def get_discussions(self, user, page_no):
+        discussion_list = Discussion.objects.filter(creator=user)
+        paginator = Paginator(discussion_list, discussion_page_size)
+        return paginator.get_page(page_no)
 
-    def get_events(self, user):
+    def get_requests(self, user, page_no):
         pass
 
 
