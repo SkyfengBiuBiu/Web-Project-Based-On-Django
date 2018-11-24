@@ -59,16 +59,16 @@ Features | Status | Timetable
 2.Mid-project check-in shows faster than expected progress | Underway | 21.11.2018
 3.Make users and discussions searchable | Underway | 28.11.2018
 4.Email validation on sign-up | Complete | 15.11.2018
-5.Reset forgotten password | Complete | 12.11.2018
-6.Use separate Django apps for different parts of your project | Complete | 04.11.2018
-7.Status messages on the users’ profile pages | Underway | 28.11.2018
+5.Use separate Django apps for different parts of your project | Complete | 04.11.2018
+6.Status messages on the users’ profile pages | Underway | 28.11.2018
 
 ### Two star features
 
 Features | Status | Timetable
 -------- | ------ | ---------
-1.Using Bootstrap for mobile friendliness | Underway | 28.11.2018
-2.Use PostgreSQL as database | Complete | 03.11.2018
+1.Reset forgotten password | Complete | 12.11.2018
+2.Using Bootstrap for mobile friendliness | Underway | 28.11.2018
+3.Use PostgreSQL as database | Complete | 03.11.2018
 
 
 ## Pages and navigation
@@ -98,7 +98,7 @@ Users in the site administrator user group have full CRUD permissions on all res
 Profile:
 User’s profile has both public and private data. Private data is only shown to other logged in users that are friends of this user. The data on the profile page could be edited and saved.
 The profile mainly includes the status message, friend list, and discussion list.
-In the status message, user could update, and to which user’s friends can comment on.
+The privacy settings include “just me”, “friends”, “public”. User can modify their privacy settings for different data: real name, email, phone, address, friend list.
 
 
 
@@ -109,7 +109,7 @@ Friendship requests’ status remain open until accepted or declined.
 
 
 Discussion:
-Discussion model contains two aspects: discussion details and the comment issue. In discussion details, the discussion list would exit. The comment addresses the username, date and time and the main content.
+Existing Discussion model is implemented to build a channel for communication between the creator and users. Existing ChatMessage (Comments) model is implemented to convey information among discussion members. It involves the features, such as user, headline (presenting time) and message content.
 
 
 ### URIs
@@ -123,7 +123,7 @@ URI | Description
 /users/password_reset/ | URI for User Password Reset.
 /users/signup/ | URI for User Sign Up View.
 /users/signup/done | URI for Sign Up Done View.
-/users/signup/<uidb64>/<token>/ | URI for Sign Up Confirm View.
+/users/signup/{uidb64}/{token}/ | URI for Sign Up Confirm View.
 /users/{user_id}/profile/ | URI for User Profile View.
 /users/{user_id}/settings/ | URI for Privacy Settings View.
 /users/{user_id}/delete/ | URI for User Account Delete View.
@@ -191,7 +191,7 @@ profiles/templates/profiles/profile_base.html | basic template page for Profiles
 profiles/templates/profiles/profile_home.html | show users profile information and post, friend, dicussion list.
 profiles/templates/profiles/post/post_create_form.html | post message form.
 profiles/templates/profiles/post/post_list.html | post message list.
-friendships/templates/friendships/friendship_home.html | show users' friend list.
+friendships/templates/friendships/friendship_home.html | show user list.
 friendships/templates/friendships/friendship_request.html | show friendship request list.
 discussions/templates/discussions/discussion_home.html | show users' discussion list.
 discussions/templates/discussions/discussion_detail.html | 1. Actions: show discussion detail, send and delete messages.<br>2. Forms: MessageForm.
