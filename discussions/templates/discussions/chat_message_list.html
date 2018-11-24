@@ -1,7 +1,7 @@
 {% for chat in chat_list %}
 
     <div class="incoming_msg" >
-        <div class="incoming_msg_img">User{{ chat.user_id }}<img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"></div>
+        <div class="incoming_msg_img">{{ chat.user.last_name }}{{ chat.user.first_name }}<img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"></div>
 
         <div class="received_msg">
             <div class="received_withd_msg">

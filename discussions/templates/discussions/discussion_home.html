@@ -35,6 +35,8 @@
                                         <h5>{{ discussion.id }}-{{ discussion.topic }} <span class="chat_date">{{ discussion.date }}</span>
                                         </h5>
                                         <p>
+                                                Creator{{ discussion.creator.id }}
+                                                Name:   {{ discussion.creator.last_name }}{{ discussion.creator.first_name }}<br>
                                             {% for user in discussion.users.all.distinct %}
                                                 User{{ user.id }}
                                                 Name:   {{ user.last_name }}{{ user.first_name }}<br>

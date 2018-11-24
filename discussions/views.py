@@ -14,11 +14,9 @@ from .forms import DiscussionCreationForm
 def home(request, user_id):
 
     if request.user.id is None:
-
         return HttpResponseRedirect(reverse_lazy('login'))
 
     elif request.user.id != user_id:
-
         return HttpResponseRedirect('/discussions/%s/home' % request.user.id)
 
     else:
