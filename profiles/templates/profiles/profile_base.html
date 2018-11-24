@@ -22,7 +22,22 @@
                     <div class="card-body">
                         <h5 class="card-text">{{ owner.username }}</h5>
                         {% if user.id == owner.id %}
-                            <a href="{% url 'users:profile' owner.id %}" class="btn btn-primary">Edit Profile</a>
+                            <div align="center">
+                                <a href="{% url 'users:profile' owner.id %}" class="btn btn-primary btn-sm">Edit
+                                    Profile</a>
+                            </div>
+                        {% endif %}
+                        <!-- Add Friendship -->
+                        {% if user.id != owner.id %}
+                            <form method="post" id="requestform"
+                                  action="/friendships/{{ user.id }}/{{ owner.id }}/profile/">
+                                {% csrf_token %}
+                                <p><input type="hidden" name="recipient_id" value="{{ owner.id }}"/></p>
+                                <p><input type="hidden" name="sender_id" value="{{ owner.id }}"/></p>
+                                <div align="center">
+                                    <input type="submit" class="btn btn-primary btn-sm" value='add friend'>
+                                </div>
+                            </form>
                         {% endif %}
                     </div>
                     <ul class="list-group list-group-flush">

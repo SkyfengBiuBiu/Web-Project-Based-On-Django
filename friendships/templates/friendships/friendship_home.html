@@ -18,7 +18,7 @@
             {% for user_total in user_total_list %}
                 <tr>
                     <td class="text-center">{{ user_total.id }}</td>
-                    <td class="text-center"><a href="/friendships/{{ user_id }}/{{ user_total.id }}/profile">{{ user_total.username }}</a></td>
+                    <td class="text-center"><a href="{% url 'profiles:visit_home' user_total.id %}">{{ user_total.username }}</a></td>
                 </tr>
             {% endfor %}
             </tbody>
