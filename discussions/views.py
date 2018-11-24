@@ -12,17 +12,28 @@ from .forms import DiscussionCreationForm
 
 # Create your views here.
 def home(request, user_id):
-    context = {}
-    try:
-        uid = request.user.id
-        user_discussions = Discussion.objects.filter(users=uid)
-        creator_discussions = Discussion.objects.filter(creator=uid)
-        all_discussions = user_discussions | creator_discussions
-        context['user_id'] = uid
-        context['discussions'] = all_discussions
-    except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist, ValidationError):
-        user_discussions = None
-    return HttpResponse(render(request, 'discussions/discussion_home.html', context))
+
+    if request.user.id is None:
+
+        return HttpResponseRedirect(reverse_lazy('login'))
+
+    elif request.user.id != user_id:
+
+        return HttpResponseRedirect('/discussions/%s/home' % request.user.id)
+
+    else:
+        context = {}
+        try:
+            uid = request.user.id
+            user_discussions = Discussion.objects.filter(users=uid)
+            creator_discussions = Discussion.objects.filter(creator=uid)
+            all_discussions = user_discussions | creator_discussions
+            context['user_id'] = uid
+            context['discussions'] = all_discussions
+        except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist, ValidationError):
+            user_discussions = None
+        return HttpResponse(render(request, 'discussions/discussion_home.html', context))
+
 
 
 # Ajax Post Views
