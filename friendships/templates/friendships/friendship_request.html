@@ -5,140 +5,116 @@
 {% endblock %}
 
 {% block content %}
-    <h1>this is friendship request test</h1>
-    <table border="8">
-        <thead>
-        <tr>
-            <td colspan="3" align="middle">request_sending_list</td>
-        </tr>
-        <tr>
-            <th>sender_id</th>
-            <th>recipient_id</th>
-            <th>date</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for request_sending in request_sending_list %}
-            <tr>
-                <td>{{ request_sending.sender_id }}</td>
-                <td>{{ request_sending.recipient_id }}</td>
-                <td>{{ request_sending.date }}</td>
-                <td>
-                    <form method="post" id="DeleteSend" action="/friendships/{{ user_id }}/request/">
-                        {% csrf_token %}
-                        <p><input type="hidden" name="recipient_id" value="{{ request_sending.recipient_id }}"/></p>
-                        <p><input type="hidden" name="sender_id" value="{{ request_sending.sender_id }}"/></p>
-                        <p><input type="hidden" name="SendOrRecvOrFriendOrNotification" value="send"/></p>
-                        <input type="submit" value="delete">
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
-    <table border="8">
-        <thead>
-        <tr>
-            <td colspan="3" align="middle">request_receive_list</td>
-        </tr>
-        <tr>
-            <th>sender_id</th>
-            <th>recipient_id</th>
-            <th>date</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for request_receive in request_receive_list %}
+    <div class="container" style="width: 100%">
+        <table class="table table-sm" >
+            <thead class="thead-default">
             <tr>
-                <td>{{ request_receive.sender_id }}</td>
-                <td>{{ request_receive.recipient_id }}</td>
-                <td>{{ request_receive.date }}</td>
-                <td>
-                    <form method="post" id="AcceptReceive" action="/friendships/{{ user_id }}/request/">
-                        {% csrf_token %}
-                        <p><input type="hidden" name="recipient_id" value="{{ request_receive.recipient_id }}"/></p>
-                        <p><input type="hidden" name="sender_id" value="{{ request_receive.sender_id }}"/></p>
-                        <p><input type="hidden" name="SendOrRecvOrFriendOrNotification" value="receive"/></p>
-                        <p><input type="hidden" name="status" value="accept"/></p>
-                        <input type="submit" value="accept">
-                    </form>
-                    <form method="post" id="DeclineReceive" action="/friendships/{{ user_id }}/request/">
-                        {% csrf_token %}
-                        <p><input type="hidden" name="recipient_id" value="{{ request_receive.recipient_id }}"/></p>
-                        <p><input type="hidden" name="sender_id" value="{{ request_receive.sender_id }}"/></p>
-                        <p><input type="hidden" name="SendOrRecvOrFriendOrNotification" value="receive"/></p>
-                        <p><input type="hidden" name="status" value="decline"/></p>
-                        <input type="submit" value="decline">
-                    </form>
-                </td>
+                <th rowspan=$rowspan style='vertical-align: middle;text-align: center;'>Sender ID</th>
+                <th rowspan=$rowspan style='vertical-align: middle;text-align: center;'>Recipient ID</th>
+                <th rowspan=$rowspan style='vertical-align: middle;text-align: center;'>Date</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <tr rowspan=$rowspan style='vertical-align: middle;text-align: center;'>
+                    <td colspan="4" class="table-active"><h4>Sending Request</h4></td>
+                </tr>
+                {% for request_sending in request_sending_list %}
+                <tr>
+                    <td rowspan=$rowspan style='vertical-align: middle;text-align: center;'>
+                        {{ request_sending.sender_id }}
+                    </td>
+                    <td rowspan=$rowspan style='vertical-align: middle;text-align: center;'>
+                        {{ request_sending.recipient_id }}
+                    </td>
+                    <td rowspan=$rowspan style='vertical-align: middle;text-align: center;'>
+                        {{ request_sending.date }}
+                    </td>
+                    <td>
+                        <form method="post" id="DeleteSend" action="/friendships/{{ user_id }}/request/">
+                            {% csrf_token %}
+                            <p><input type="hidden" name="recipient_id" value="{{ request_sending.recipient_id }}"/></p>
+                            <p><input type="hidden" name="sender_id" value="{{ request_sending.sender_id }}"/></p>
+                            <p><input type="hidden" name="SendOrRecvOrFriendOrNotification" value="send"/></p>
+                            <div style="position:relative;left: 10px;bottom: 7px;">
+                                <input type="submit" class="btn btn-primary" value="delete">
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
 
-    <table border="8">
-        <thead>
-        <tr>
-            <td colspan="3" align="middle">friendship_list</td>
-        </tr>
-        <tr>
-            <th>user1_id</th>
-            <th>user2_id</th>
-            <th>date</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for friendship in friendship_list %}
-            <tr>
-                <td>{{ friendship.user1_id }}</td>
-                <td>{{ friendship.user2_id }}</td>
-                <td>{{ friendship.date }}</td>
-                <td>
-                    <form method="post" id="DeleteFriend" action="/friendships/{{ user_id }}/request/">
-                        {% csrf_token %}
-                        <p><input type="hidden" name="user1_id" value="{{ friendship.user1_id }}"/></p>
-                        <p><input type="hidden" name="user2_id" value="{{ friendship.user2_id }}"/></p>
-                        <p><input type="hidden" name="SendOrRecvOrFriendOrNotification" value="friend"/></p>
-                        <input type="submit" value="delete">
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
-    <table border="8">
-        <thead>
-        <tr>
-            <td colspan="3" align="middle">request_decline_notification_list</td>
-        </tr>
-        <tr>
-            <th>user1_id</th>
-            <th>user2_id</th>
-            <th>date</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for request_decline_notification in request_decline_notification_list %}
-            <tr>
-                <td>{{ request_decline_notification.sender_id }}</td>
-                <td>{{ request_decline_notification.recipient_id }}</td>
-                <td>{{ request_decline_notification.date }}</td>
-                <td>
-                    <form method="post" id="DeleteFriend" action="/friendships/{{ user_id }}/request/">
-                        {% csrf_token %}
-                        <p><input type="text" name="sender_id" value="{{ request_decline_notification.sender_id }}"/>
-                        </p>
-                        <p><input type="text" name="recipient_id"
-                                  value="{{ request_decline_notification.recipient_id }}"/></p>
-                        <p><input type="text" name="SendOrRecvOrFriendOrNotification" value="notification"/></p>
-                        <p><input type="text" name="DeclineTime" id="dtime" value="2018-11-17"/></p>
-                        <input type="submit" value="delete">
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                <tr rowspan=$rowspan style='vertical-align: middle;text-align: center;'>
+                    <td colspan="4" class="table-success"><h4>Receive Request</h4></td>
+                </tr>
+                {% for request_receive in request_receive_list %}
+                <tr>
+                    <td rowspan=$rowspan style='vertical-align: middle;text-align: center;'>
+                        {{ request_receive.sender_id }}
+                    </td>
+                    <td rowspan=$rowspan style='vertical-align: middle;text-align: center;'>
+                        {{ request_receive.recipient_id }}
+                    </td>
+                    <td rowspan=$rowspan style='vertical-align: middle;text-align: center;'>
+                        {{ request_receive.date }}
+                    </td>
+                    <td>
+                        <form method="post" id="AcceptReceive" action="/friendships/{{ user_id }}/request/">
+                            {% csrf_token %}
+                            <p><input type="hidden" name="recipient_id" value="{{ request_receive.recipient_id }}"/></p>
+                            <p><input type="hidden" name="sender_id" value="{{ request_receive.sender_id }}"/></p>
+                            <p><input type="hidden" name="SendOrRecvOrFriendOrNotification" value="receive"/></p>
+                            <p><input type="hidden" name="status" value="accept"/></p>
+                            <div style="position:relative;left: 10px;bottom: 9px;">
+                                <input type="submit" class="btn btn-primary btn-sm" value="accept">
+                            </div>
+                        </form>
+                        <form method="post" id="DeclineReceive" action="/friendships/{{ user_id }}/request/">
+                            {% csrf_token %}
+                            <p><input type="hidden" name="recipient_id" value="{{ request_receive.recipient_id }}"/></p>
+                            <p><input type="hidden" name="sender_id" value="{{ request_receive.sender_id }}"/></p>
+                            <p><input type="hidden" name="SendOrRecvOrFriendOrNotification" value="receive"/></p>
+                            <p><input type="hidden" name="status" value="decline"/></p>
+                            <div style="position:relative;left: 10px;bottom: 9px;">
+                                <input type="submit" class="btn btn-primary btn-sm" value="decline">
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+
+
+                <tr rowspan=$rowspan style='vertical-align: middle;text-align: center;'>
+                    <td colspan="4" class="table-danger"><h4>Declined Notification List</h4></td>
+                </tr>
+                {% for request_decline_notification in request_decline_notification_list %}
+                <tr>
+                    <td rowspan=$rowspan style='vertical-align: middle;text-align: center;'>
+                        <p>{{ request_decline_notification.sender_id }}</p>
+                    </td>
+                    <td rowspan=$rowspan style='vertical-align: middle;text-align: center;'>
+                        <p>{{ request_decline_notification.recipient_id }}</p>
+                    </td>
+                    <td rowspan=$rowspan style='vertical-align: middle;text-align: center;'>
+                        <p>{{ request_decline_notification.date }}</p>
+                    </td>
+                    <td>
+                        <form method="post" id="DeleteFriend" action="/friendships/{{ user_id }}/request/">
+                            {% csrf_token %}
+                            <p><input type="hidden" name="sender_id" value="{{ request_decline_notification.sender_id }}"/></p>
+                            <p><input type="hidden" name="recipient_id" value="{{ request_decline_notification.recipient_id }}"/></p>
+                            <p><input type="hidden" name="SendOrRecvOrFriendOrNotification" value="notification"/></p>
+                            <div style="position:relative;left: 10px;bottom: 7px;">
+                                <input type="submit" class="btn btn-primary btn-sm" value="delete">
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
 {% endblock %}

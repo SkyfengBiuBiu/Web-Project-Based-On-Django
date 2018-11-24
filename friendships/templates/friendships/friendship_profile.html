@@ -5,60 +5,43 @@
 {% endblock %}
 
 {% block content %}
-    <h1>this is friendship profile test</h1>
-    <table border="8">
-        <thead>
-        <tr>
-            <th>id</th>
-            <th>username</th>
-            <th>first_name</th>
-            <th>last_name</th>
-            <th>email</th>
-            <th>phone</th>
-            <th>address</th>
-            <th>date_joined</th>
-
-        </tr>
-        </thead>
-        <tbody>
+    <div class="card">
+        <br>
         {% for user in user_detail %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.username }}</td>
-                <td>{{ user.first_name }}</td>
-                <td>{{ user.last_name }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.phone }}</td>
-                <td>{{ user.address }}</td>
-                <td>{{ user.date_joined }}</td>
-                {% if user.id !=  user_id %}
-                    <form method="post" id="requestform" action="/friendships/{{ user_id }}/{{ user.id }}/profile/">
-                        {% csrf_token %}
-                        <p><input id="time" type="hidden" name="timestamp"/></p>
-                        <p><input type="hidden" name="recipient_id" value="{{ user.id }}"/></p>
-                        <p><input type="hidden" name="sender_id" value="{{ user_id }}"/></p>
+            <p class="text-center"><img class="img-responsive center-block" src="https://static.runoob.com/images/mix/img_avatar.png" style="width:10%"></p>
+            <div class="container">
+                <h1 class="text-center">{{ user.username }}</h1>
+                <p class="text-center">User ID: {{ user.id }}</p>
+                <p class="text-center">First Name: {{ user.first_name }}</p>
+                <p class="text-center">Last Name: {{ user.last_name }}</p>
+                <p class="text-center">Email: {{ user.email }}</p>
+                <p class="text-center">Phone: {{ user.phone }}</p>
+                <p class="text-center">Address: {{ user.address }}</p>
+                <p class="text-center">Joined Date: {{ user.date_joined }}</p>
 
-                        <input type="button" onclick='botton_click()' value='add friend'>
-                        <script>
-                            function add0(m) {
-                                return m < 10 ? '0' + m : m
-                            }
+                <div style="margin: 24px 0;"  class="text-center">
+                    <a href="#"><i class="fa fa-dribbble"></i></a>
+                    <a href="#"><i class="fa fa-twitter"></i></a>
+                    <a href="#"><i class="fa fa-linkedin"></i></a>
+                    <a href="#"><i class="fa fa-facebook"></i></a>
+                </div>
 
-                            function botton_click() {
-                                var time = new Date();
-                                var new_date = time.getFullYear() + '-' + add0(time.getMonth() + 1) + '-' + add0(time.getDate()) + ' ' + add0(time.getHours()) + ':' + add0(time.getMinutes()) + ':' + add0(time.getSeconds());
-
-                                document.getElementById("time").value = new_date;
-                                document.getElementById("requestform").submit()
-                            }
-                        </script>
-                    </form>
-                {% else %}
-                    <p>this is your own profile page</p>
-                {% endif %}
-            </tr>
+                    {% if user.id !=  user_id %}
+                        <form method="post" id="requestform" action="/friendships/{{ user_id }}/{{ user.id }}/profile/">
+                            {% csrf_token %}
+                            <p><input type="hidden" name="recipient_id" value="{{ user.id }}"/></p>
+                            <p><input type="hidden" name="sender_id" value="{{ user_id }}"/></p>
+                            <div align="center">
+                                <input type="submit" class="btn btn-primary btn-sm" value='add friend'>
+                            </div>
+                        </form>
+                    {% else %}
+{#                        <p>this is your own profile page</p>#}
+                        <br>
+                    {% endif %}
+            </div>
         {% endfor %}
-        </tbody>
-    </table>
-
+    <br>
+    <br>
+    </div>
 {% endblock %}
