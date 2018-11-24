@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect,HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.utils import timezone
 
 from friendships.models import Friendship,FriendshipRequest
 from users.models import CustomUser
@@ -22,7 +23,8 @@ def home(request, user_id):
 
         if request.method == "GET":
 
-            user_list = CustomUser.objects.all()
+            user_list = CustomUser.objects.all().reverse()
+
             return render(request, 'friendships/friendship_home.html', {'user_total_list': user_list,'user_id':user_id})
 
         else:
@@ -54,13 +56,16 @@ def request(request, user_id):
             friendship_list_recv = Friendship.objects.filter(user2_id=user_id)
             friendship_list = friendship_list_send | friendship_list_recv
 
-            request_decline_notification_list = FriendshipRequest.objects.filter(sender_id=user_id, status=255);
+            request_decline_notification_list = FriendshipRequest.objects.filter(sender_id=user_id, status=255)
+            notification_cnt = request_decline_notification_list.count()
+
 
             return render(request, 'friendships/friendship_request.html', {'request_sending_list':request_sending_list,\
                                                                            'request_receive_list':request_receive_list, \
                                                                            'friendship_list':friendship_list, \
                                                                            'request_decline_notification_list':request_decline_notification_list,\
-                                                                           'user_id':user_id})
+                                                                           'user_id':user_id,\
+                                                                           'notification_cnt':notification_cnt})
         else:
 
             if request.POST.get('SendOrRecvOrFriendOrNotification') == 'send':
@@ -75,15 +80,19 @@ def request(request, user_id):
 
                     recipient_id = request.POST.get('recipient_id')
                     sender_id = request.POST.get('sender_id')
-                    Friendship.objects.create(user1_id=sender_id, user2_id=recipient_id, date='1991-07-22')
-                    FriendshipRequest.objects.filter(sender_id=sender_id, recipient_id=recipient_id, status=0).update(status=128)
+                    timestamp = timezone.now()
+
+                    Friendship.objects.create(user1_id=sender_id, user2_id=recipient_id, date=timestamp)
+                    FriendshipRequest.objects.filter(sender_id=sender_id, recipient_id=recipient_id, status=0).update(status=128, date=timestamp)
                     FriendshipRequest.objects.filter(sender_id=recipient_id, recipient_id=sender_id).delete()#delete reverse request
 
                 elif request.POST.get('status') == 'decline':
 
                     recipient_id = request.POST.get('recipient_id')
                     sender_id = request.POST.get('sender_id')
-                    FriendshipRequest.objects.filter(sender_id=sender_id, recipient_id=recipient_id, status=0).update(status=255)
+                    timestamp = timezone.now()
+
+                    FriendshipRequest.objects.filter(sender_id=sender_id, recipient_id=recipient_id, status=0).update(status=255, date=timestamp)
 
             elif request.POST.get('SendOrRecvOrFriendOrNotification') == 'friend':
 
@@ -123,7 +132,7 @@ def profile(request, user_id, recipient_id):
                                                                            'user_id': user_id})
         else:
 
-            timestamp = request.POST.get('timestamp')
+            timestamp = timezone.now()
             recipient_id = request.POST.get('recipient_id')
             sender_id = request.POST.get('sender_id')
 
