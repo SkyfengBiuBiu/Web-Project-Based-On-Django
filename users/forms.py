@@ -109,7 +109,7 @@ CustomUserProfileFormSet = inlineformset_factory(CustomUser, CustomUserProfile, 
 class PrivacySettingsForm(forms.ModelForm):
     class Meta:
         model = PrivacySettings
-        fields = ['real_name_p', 'email_p', 'phone_p', 'address_p', 'profile_p', 'friend_list_p']
+        fields = ['real_name_p', 'email_p', 'phone_p', 'address_p', 'friend_list_p']
 
     def __init__(self, *args, **kwargs):
         super(PrivacySettingsForm, self).__init__(*args, **kwargs)
@@ -117,7 +117,6 @@ class PrivacySettingsForm(forms.ModelForm):
         self.fields['email_p'].widget.attrs.update({'class': 'form-control'})
         self.fields['phone_p'].widget.attrs.update({'class': 'form-control'})
         self.fields['address_p'].widget.attrs.update({'class': 'form-control'})
-        self.fields['profile_p'].widget.attrs.update({'class': 'form-control'})
         self.fields['friend_list_p'].widget.attrs.update({'class': 'form-control'})
 
 

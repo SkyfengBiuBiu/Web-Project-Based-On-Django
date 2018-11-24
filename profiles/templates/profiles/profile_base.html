@@ -22,23 +22,38 @@
                     <div class="card-body">
                         <h5 class="card-text">{{ owner.username }}</h5>
                         {% if user.id == owner.id %}
-                            <div align="center">
-                                <a href="{% url 'users:profile' owner.id %}" class="btn btn-primary btn-sm">Edit
-                                    Profile</a>
+                            <div>
+                                <a href="{% url 'users:profile' owner.id %}" class="btn btn-primary btn-sm">
+                                    Edit Profile</a>
                             </div>
                         {% endif %}
+                        <!-- Delete Friendship -->
+                        {% if friendship %}
+                            <form method="post" id="DeleteFriend" action="/friendships/{{ user.id }}/request/">
+                                {% csrf_token %}
+                                <p><input type="hidden" name="user1_id" value="{{ friendship.user1_id }}"/></p>
+                                <p><input type="hidden" name="user2_id" value="{{ friendship.user2_id }}"/></p>
+                                <p><input type="hidden" name="SendOrRecvOrFriendOrNotification" value="friend"/></p>
+                                <div>
+                                    <input type="submit" class="btn btn-primary btn-sm" value="delete">
+                                </div>
+                            </form>
+                        {% endif %}
+                        <!-- Delete Friendship -->
+
                         <!-- Add Friendship -->
-                        {% if user.id != owner.id %}
+                        {% if user.id != owner.id and friendship is None %}
                             <form method="post" id="requestform"
                                   action="/friendships/{{ user.id }}/{{ owner.id }}/profile/">
                                 {% csrf_token %}
                                 <p><input type="hidden" name="recipient_id" value="{{ owner.id }}"/></p>
                                 <p><input type="hidden" name="sender_id" value="{{ user.id }}"/></p>
-                                <div align="center">
+                                <div>
                                     <input type="submit" class="btn btn-primary btn-sm" value='add friend'>
                                 </div>
                             </form>
                         {% endif %}
+                        <!-- Add Friendship -->
                     </div>
                     <ul class="list-group list-group-flush">
                         {% if user.id == owner.id or privacy_settings.email_p %}

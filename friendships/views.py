@@ -1,11 +1,11 @@
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect,HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
 from django.utils import timezone
 
-from friendships.models import Friendship,FriendshipRequest
+from friendships.models import Friendship, FriendshipRequest
 from users.models import CustomUser
+
+
 # Create your views here.
 
 
@@ -100,6 +100,7 @@ def request(request, user_id):
                 user2_id = request.POST.get('user2_id')
                 Friendship.objects.filter(user1_id=user1_id, user2_id=user2_id).delete()
                 FriendshipRequest.objects.filter(sender_id=user1_id, recipient_id=user2_id, status=128).delete()
+                return HttpResponseRedirect(reverse_lazy('profiles:my_home'))
 
             elif request.POST.get('SendOrRecvOrFriendOrNotification') == 'notification':
 

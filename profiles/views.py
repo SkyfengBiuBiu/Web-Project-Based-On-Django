@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -47,7 +48,7 @@ class ProfilesHomeView:
         return paginator.get_page(page_no)
 
     def get_discussions(self, user, page_no):
-        discussion_list = Discussion.objects.filter(creator=user)
+        discussion_list = Discussion.objects.filter(Q(creator=user) | Q(users=user))
         paginator = Paginator(discussion_list, discussion_page_size)
         return paginator.get_page(page_no)
 
@@ -83,6 +84,10 @@ class VisitingHomeView(ProfilesHomeView, generic.TemplateView):
         privacy_settings.address_p = user.has_privacy_perm(owner, privacy_settings.address_p)
         privacy_settings.friend_list_p = user.has_privacy_perm(owner, privacy_settings.friend_list_p)
         context['privacy_settings'] = privacy_settings
+
+        # Friendship Context
+        friendship = user.is_friend(owner);
+        context['friendship'] = friendship
 
         return self.get_page_data(context, owner)
 

@@ -19,7 +19,7 @@ class ChatMessage(models.Model):
 
 class Discussion(models.Model):
     """ Write your answer in 7.1 here. """
-    topic = models.CharField(max_length=200,default='family')
+    topic = models.CharField(max_length=200,default='family', blank=False, null=False)
     creator = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='creator')
     users = models.ManyToManyField(CustomUser,related_name='users')
     chatMessage = models.ManyToManyField(ChatMessage)

@@ -63,8 +63,7 @@
     </div>
 
     <!-- Message Notifications -->
-    <div id="id_ajax_notification" class="modal fade bottom" id="frameModalBottom" tabindex="-1" role="dialog"
-         aria-labelledby="ajax_notification"
+    <div id="id_ajax_notification" class="modal fade bottom" tabindex="-1" role="dialog"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -82,7 +81,7 @@
 {% endblock %}
 
 {% block js-extra-script %}
-    <script type="text/javascript">
+    <script>
         $(document).ready(function () {
             {% if user.id == owner.id %}
                 $("#id_post_create_div").load(

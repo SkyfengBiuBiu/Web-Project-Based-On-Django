@@ -1,17 +1,15 @@
 {% load static %}
 
 <div class="msg_history">
-
-    <div id="id_chat_message_list">
-    </div>
+    <div id="id_chat_message_list"></div>
 </div>
 <div class="type_msg">
-<form  method="post" id="ChatMessageForm" action="/discussions/{{ discussion_id }}/detail">
-    <div id="id_chat_message_form" >
-        {% include 'discussions/chat_message_form.html' %}
-    </div>
-    <input id="form_input" type="submit" value='send'>
-</form>
+    <form method="post" id="ChatMessageForm" action="/discussions/{{ discussion_id }}/detail">
+        <div id="id_chat_message_form">
+            {% include 'discussions/chat_message_form.html' %}
+        </div>
+        <input id="form_input" type="submit" value='send'>
+    </form>
 </div>
 {% block js-extra-script %}
     <script type="text/javascript">
@@ -55,7 +53,6 @@
         $(".DeleteFormClass").on("submit", function (event) {
             event.preventDefault();
 
-
             $.ajax({
                 data: $(this).serialize(),
                 type: $(this).attr('method'),
@@ -81,16 +78,4 @@
         document.getElementById("time").value = new_date;
         document.getElementById("ChatMessageForm").submit()
     }
-
-    //更新消息
-    {#function updateMsg() {#}
-    {#    $.post(#}
-    {#        "{% url 'discussions:discussion_post' %}",#}
-    {#        {},#}
-    {#        function (data) {#}
-    {#            $('.list-group-item').load(data);    //解析返回的 xml#}
-    {#        });#}
-    {#    setTimeout("updateMsg()", 1000);#}
-    {#    console.log("sfgfwgefgsfdg");//每秒更新一次#}
-    {# } #}
 {% endblock %}

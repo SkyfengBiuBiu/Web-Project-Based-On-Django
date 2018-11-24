@@ -9,7 +9,8 @@
                         <img class="rounded-circle" width="45"
                                 {% if post.owner.customuserprofile.photo.url is not None %}
                              src="{{ post.owner.customuserprofile.photo.url }}"
-                                {% else %} src="{% static 'default_photo.jpg' %}" {% endif %} alt="">
+                                {% else %} src="{% static 'default_photo.jpg' %}" {% endif %}
+                             alt="{{ post.owner.username }}'s Profile Photo">
                     </div>
                     <div class="ml-2">
                         <div class="h5 m-0">{{ post.owner.username }}</div>

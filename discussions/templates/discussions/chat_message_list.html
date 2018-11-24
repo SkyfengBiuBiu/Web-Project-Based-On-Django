@@ -1,44 +1,31 @@
-{% for chat in chat_list %}
+{% load static %}
 
-    <div class="incoming_msg" >
-        <div class="incoming_msg_img">{{ chat.user.last_name }}{{ chat.user.first_name }}<img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"></div>
+{% for chat in chat_list %}
+    <div class="incoming_msg">
+        <div class="incoming_msg_img">
+            <h6 style="font-size: 0.5rem;">
+                <img class="rounded-circle" width="30"
+                        {% if chat.user.customuserprofile.photo.url is not None %}
+                     src="{{ chat.user.customuserprofile.photo.url }}"
+                        {% else %} src="{% static 'default_photo.jpg' %}" {% endif %}
+                     alt="{{ chat.user.username }}'s Profile Photo">
+                {{ chat.user.last_name }} {{ chat.user.first_name }}
+            </h6>
+        </div>
 
         <div class="received_msg">
             <div class="received_withd_msg">
                 <p>{{ chat.content }}</p>
-
-                <span class="time_date"> {{ chat.headline }}</span></div>
-            <form method="post" id="DeleteMessageForm" class="DeleteFormClass" action="/discussions/{{ discussion_id }}/detail">
+                <span class="time_date"> {{ chat.headline }}</span>
+            </div>
+            <form method="post" id="DeleteMessageForm" class="DeleteFormClass"
+                  action="/discussions/{{ discussion_id }}/detail">
                 {% csrf_token %}
                 <input type="hidden" name="id" value={{ chat.id }}>
                 <input type="hidden" name="user_id" value={{ chat.user_id }}>
                 <input type="hidden" name="SendOrDelete" value="delete">
-                <input type="submit" class="delete" class="btn btn-primary" value='delete'>
+                <input type="submit" class="delete" value='delete'>
             </form>
-
         </div>
-
     </div>
-
-
-
-    {##}
-    {##}
-    {##}
-    {##}
-    {##}
-    {#    <tr>#}
-    {#        <td>{{ chat.headline }}</td>#}
-    {#        <td>{{ chat.user_id }}</td>#}
-    {#        <td>{{ chat.content }}</td>#}
-    {#        <td>#}
-    {#            <form method="post" id="DeleteMessageForm" class="DeleteFormClass" action="/discussions/{{ discussion_id }}/detail">#}
-    {#                {% csrf_token %}#}
-    {#                <p><input type="hidden" name="id" value={{ chat.id }}></p>#}
-    {#                <p><input type="hidden" name="user_id" value={{ chat.user_id }}></p>#}
-    {#                <p><input type="hidden" name="SendOrDelete" value="delete"></p>#}
-    {#                <input type="submit" value='delete'>#}
-    {#            </form>#}
-    {#        </td>#}
-    {#    </tr>#}
 {% endfor %}

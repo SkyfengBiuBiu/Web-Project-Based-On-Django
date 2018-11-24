@@ -6,71 +6,76 @@
 
 {% block content %}
     {% block right %}
-    <div class="container">
+        <div class="container">
         <h3 class=" text-center">Discussion</h3>
+
         <div class="messaging">
-            <div class="inbox_msg">
-                <div class="inbox_people">
-                    <div class="headind_srch">
-                        <div class="recent_heading">
-                            <h4>Recent</h4>
-                        </div>
-                        <div class="srch_bar">
-                            <div class="stylish-input-group">
-                                <a class="btn btn-outline-primary mx-sm-1" href="{% url 'discussions:discussion_create' %}">Create
-                                    discussion
-                                </a>
+        <div class="inbox_msg">
+        <div class="inbox_people">
+            <div class="headind_srch">
+                <div class="recent_heading">
+                    <h4>Recent</h4>
+                </div>
+                <div class="srch_bar">
+                    <div class="stylish-input-group">
+                        <a class="btn btn-outline-primary mx-sm-1" href="{% url 'discussions:discussion_create' %}">Create
+                            discussion
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="inbox_chat">
+                {% for discussion in discussions.all.distinct %}
+                    <div class="chat_list">
+                        <div class="chat_people">
+                            <div class="chat_img">
+                                <img class="rounded-circle" src="{% static 'discussions-pic.jpg' %}"
+                                     alt="Discussions Photo">
+                            </div>
+                            <div class="chat_ib">
+                                <h5>{{ discussion.id }}-{{ discussion.topic }}
+                                    <span class="chat_date">{{ discussion.date }}</span>
+                                </h5>
+                                <p>
+                                    Creator: {{ discussion.creator.last_name }}{{ discussion.creator.first_name }}<br>
+                                    {% for user in discussion.users.all.distinct %}
+                                        User: {{ user.last_name }}{{ user.first_name }}<br>
+                                    {% endfor %}
+                                </p>
+                                <div>
+                                    <a class="discussion_details card-link"
+                                       href="{% url 'discussions:discussion_detail' discussion.id %}"><i
+                                            class="fa fa-gittip"></i> Enroll</a>
+                                    <a class="card-link"
+                                       href="{% url 'discussions:discussion_confirm_leave' discussion.id user_id %}"><i
+                                            class="fa fa-mail-forward"></i> Leave</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="inbox_chat">
 
-
-                        {% for discussion in discussions.all.distinct %}
-                            <div class="chat_list">
-                                <div class="chat_people">
-                                    <div class="chat_img"><img src="https://ptetutorials.com/images/user-profile.png"
-                                                               alt="sunil"></div>
-                                    <div class="chat_ib">
-                                        <h5>{{ discussion.id }}-{{ discussion.topic }} <span class="chat_date">{{ discussion.date }}</span>
-                                        </h5>
-                                        <p>
-                                                Creator{{ discussion.creator.id }}
-                                                Name:   {{ discussion.creator.last_name }}{{ discussion.creator.first_name }}<br>
-                                            {% for user in discussion.users.all.distinct %}
-                                                User{{ user.id }}
-                                                Name:   {{ user.last_name }}{{ user.first_name }}<br>
-                                            {% endfor %}
-                                </p>
-                                <div>
-                                    <a  class="discussion_details" class="card-link" href="{% url 'discussions:discussion_detail' discussion.id %}"><i class="fa fa-gittip"></i> Enroll</a>
-                                    <a  class="card-link"href="{% url 'discussions:discussion_confirm_leave' discussion.id user_id %}"><i class="fa fa-mail-forward"></i> Leave</a>
-                                </div>
-                            </div>
-                            </div>
-                            </div>
-
-                        {% endfor %}
+                {% endfor %}
 
 
             </div>
         </div>
-            {% endblock %}
-    {% block left %}
-        <div class="mesgs">
+    {% endblock %}
+{% block left %}
+    <div class="mesgs">
 
 
-        </div>
-      </div>
-
-         {% endblock %}
+    </div>
     </div>
 
-    </div></div>
+{% endblock %}
+</div>
+
+</div>
+    </div>
 {% endblock %}
 
 {% block js-extra-script %}
-    <script type="text/javascript">
+    <script>
         $(document).ready(function () {
 
             refreshPosts();

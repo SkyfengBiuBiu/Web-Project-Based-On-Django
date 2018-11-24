@@ -29,6 +29,13 @@ class CustomUser(AbstractUser):
             return False
         return False
 
+    def is_friend(self, user):
+        from friendships.models import Friendship
+        friendship = Friendship.objects.filter(Q(user1=self, user2=user) | Q(user1=user, user2=self))
+        if friendship.exists():
+            return friendship[0]
+        return None
+
 
 class CustomUserProfile(models.Model):
     last_modified = models.DateTimeField(_('last modified'), auto_now=True)
