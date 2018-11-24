@@ -33,7 +33,7 @@
                                   action="/friendships/{{ user.id }}/{{ owner.id }}/profile/">
                                 {% csrf_token %}
                                 <p><input type="hidden" name="recipient_id" value="{{ owner.id }}"/></p>
-                                <p><input type="hidden" name="sender_id" value="{{ owner.id }}"/></p>
+                                <p><input type="hidden" name="sender_id" value="{{ user.id }}"/></p>
                                 <div align="center">
                                     <input type="submit" class="btn btn-primary btn-sm" value='add friend'>
                                 </div>
