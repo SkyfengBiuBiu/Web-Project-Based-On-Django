@@ -31,7 +31,9 @@
                         {{ form.as_p }}
 
                         {{ profile.management_form }}
-                        {{ profile.as_p }}
+                        {% for profile_form in profile %}
+                            {{ profile_form.as_p }}
+                        {% endfor %}
                         <button type="submit" class="btn btn-primary">Update My Profile</button>
                     </form>
                 </div>
