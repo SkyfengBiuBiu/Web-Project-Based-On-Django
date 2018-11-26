@@ -18,10 +18,13 @@ class FriendshipRequest(models.Model):
     recipient = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='recipient')
     date = models.DateTimeField(auto_now=True)
 
+    INITIAL = 0
+    ACCEPTED = 128
+    DECLINED = 255
     STATUS_CHOICES = (
-        (0, 'Initial'),
-        (128, 'Accepted'),
-        (255, 'Declined'),
+        (0, 'INITIAL' ),
+        (128, 'ACCEPTED'),
+        (255, 'DECLINED'),
     )
     status = models.IntegerField(default=0, choices=STATUS_CHOICES)
 
