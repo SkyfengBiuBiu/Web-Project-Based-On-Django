@@ -2,6 +2,10 @@
 
 {% load static %}
 
+{% block extra-css %}
+    <link rel="stylesheet" href="{% static 'discussion.css' %}">
+{% endblock %}
+
 {% block title %}Discussion index{% endblock %}
 
 {% block content %}

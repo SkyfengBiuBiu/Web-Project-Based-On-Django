@@ -6,7 +6,7 @@
 
 {% block content %}
     <div class="container justify-content-center">
-        <h1 align="center">Sign up</h1>
+        <h1 style="text-align: center">Sign up</h1>
 
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -46,7 +46,7 @@
                             {% endif %}
 
                             {% if field.help_text %}
-                                <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+                                <div class="form-text text-muted">{{ field.help_text|safe }}</div>
                             {% endif %}
                         </div>
                     {% endfor %}
