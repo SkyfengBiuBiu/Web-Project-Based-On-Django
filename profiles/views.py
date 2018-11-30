@@ -48,7 +48,7 @@ class ProfilesHomeView:
         return paginator.get_page(page_no)
 
     def get_discussions(self, user, page_no):
-        discussion_list = Discussion.objects.filter(Q(creator=user) | Q(users=user))
+        discussion_list = Discussion.objects.filter(Q(creator=user) | Q(users=user)).distinct()
         paginator = Paginator(discussion_list, discussion_page_size)
         return paginator.get_page(page_no)
 

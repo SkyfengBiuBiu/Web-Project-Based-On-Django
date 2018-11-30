@@ -204,9 +204,14 @@ https://sheltered-badlands-86452.herokuapp.com/
 
 Testing Account | type | password
 --------------- | ---- | --------
+TestUser | normal user | test4sns
 TestUser1 | normal user | test4sns
 TestUser2 | normal user | test4sns
+TestUser3 | normal user | test4sns
+TestUser5 | normal user | test4sns
+TestUser6 | normal user | test4sns
 AdminUser1 | admin | test4sns
+AdminUser2 / admin / test4sns
 
 Heroku deployment plan:
 - Huang Xie 281685
