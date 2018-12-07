@@ -14,10 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+import re
+
 from django.conf import settings
-from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
+from django.views.static import serve
 
 from profiles.views import MyHomeView
 
@@ -31,4 +33,11 @@ urlpatterns = [
     path('friendships/', include('friendships.urls')),
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+def customized_static(prefix, view=serve, **kwargs):
+    return [
+        re_path(r'^%s(?P<path>.*)$' % re.escape(prefix.lstrip('/')), view, kwargs=kwargs),
+    ]
+
+
+urlpatterns += customized_static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
