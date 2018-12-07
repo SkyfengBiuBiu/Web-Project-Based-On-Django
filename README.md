@@ -1,4 +1,4 @@
-# Initial project plan document
+# Final project plan document
 
 ## Course project group information
 
