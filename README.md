@@ -6,21 +6,13 @@ Start the documentation with identifying information:
 
 - Member name: **Huang Xie**
 
-- student number: 281685
-
-- TUT email: huang.xie@student.tut.fi
-
 - Member name: **Yan Feng**
 
 - student number: 281679
 
-- TUT email: yan.feng@student.tut.fi
+- email:fy0469522068@gmail.com
 
 - Member name: **Liang Fang**
-
-- student number: 281684
-
-- TUT email: liang.fang@student.tut.fi (fangliang425@gmail.com)
 
 - Group name: **bwa-group003**
 
